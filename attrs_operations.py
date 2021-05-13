@@ -2,7 +2,8 @@
 
 import itertools
 import relationship_operations as RO
-
+import BooleanDOI_processing as BDOIp
+import FVS
 
 
 
@@ -26,7 +27,7 @@ def is_new_attractor(SCcom,attrs,G_rel):
 
 
 
-def consistent_groups_of_sms(G_rel, FVS_size, list_of_names):
+def consistent_groups_of_sms(G_rel, list_of_names,lines):
 
     #calculates the number of q-attrs/minimal trap spaces based on the relationships between the motifs/motif groups
     #inputs:
@@ -45,6 +46,19 @@ def consistent_groups_of_sms(G_rel, FVS_size, list_of_names):
 
 
     G_rel = RO.merge_mutual_DOIs(G_rel)
+    print('motifs/ motif groups in network of functional relationships')
+    print(G_rel.nodes(data=True))
+
+
+
+
+
+    Gread, readnodes = BDOIp.form_network(lines, sorted_nodename=False)
+    FVS_size = len(FVS.FVS(Gread))
+
+
+
+
 
 
     nodes = G_rel.nodes(data=True)[::-1]
