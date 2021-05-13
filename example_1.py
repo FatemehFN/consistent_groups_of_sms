@@ -34,7 +34,7 @@ print(MO.number_of_negative_edges_text(lines))
 
 G_rel,list_of_names=RO.construct_relationships_network(lines,rules,write_cycle_graph=False)
 
-attrs,len_attrs=AO.consistent_groups_of_sms(lines,G_rel,list_of_names,lines)
+attrs,len_attrs=AO.consistent_groups_of_sms(G_rel,list_of_names,lines)
 print('number of minimal trap spaces from consistent groups of sms:')
 print(len_attrs)
 
