@@ -6,9 +6,9 @@ import BooleanDOI_processing as BDOIp
 import PyBoolNet
 
 
-plant=35
-pollinator=35
-network_number=937
+plant=50
+pollinator=50
+network_number=953
 file_name=str(plant)+'_'+str(pollinator)+'_'+str(network_number)
 
 
@@ -31,10 +31,10 @@ print(MO.number_of_negative_edges_text(lines))
 
 
 # number of minimal trap spaces from consistent groups of sms
-Gread,readnodes = BDOIp.form_network(lines, sorted_nodename=False)
+
 G_rel,list_of_names=RO.construct_relationships_network(lines,rules,write_cycle_graph=False)
-FVS_size = len(FVS.FVS(Gread))
-attrs,len_attrs=AO.consistent_groups_of_sms(G_rel,FVS_size,list_of_names)
+
+attrs,len_attrs=AO.consistent_groups_of_sms(lines,G_rel,list_of_names,lines)
 print('number of minimal trap spaces from consistent groups of sms:')
 print(len_attrs)
 
