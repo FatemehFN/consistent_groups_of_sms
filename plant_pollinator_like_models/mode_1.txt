@@ -1,6 +1,0 @@
-#BOOLEAN RULES
-
-A*=B
-B*=C or A
-C*=D
-D*=A or C
