@@ -6,9 +6,9 @@ import BooleanDOI_processing as BDOIp
 import PyBoolNet
 
 
-plant=50
-pollinator=50
-network_number=953
+plant=30
+pollinator=25
+network_number=266
 file_name=str(plant)+'_'+str(pollinator)+'_'+str(network_number)
 
 
