@@ -60,51 +60,78 @@ def order(csms,mapping):
 
     #output: the ordered list of conditionally stable motifs
 
-
+    import math
+    ignore = []
+    swap = []
+    done = []
     while True:
-        bool=False
+        bool = False
+        bool1 = False
+        Bool2 = False
+
         for i1 in range(len(csms)):
+
             for j1 in range(len(csms)):
-                if i1 != j1:
-                    if NO.intersection(list(csms[i1][1]), NO.find_nodes_in_this_motif(csms[j1][0], mapping)) and j1 > i1:
-                        bool=True
+
+                if i1 != j1 and [csms[i1], csms[j1]] not in swap and [csms[i1], csms[j1]] not in ignore and [csms[i1],csms[j1]] not in done:
+                    if NO.intersection(list(csms[j1][1]), NO.find_nodes_in_this_motif(csms[i1][0], mapping)) and i1 > j1 and \
+                            NO.intersection(NO.find_nodes_in_this_motif(csms[j1][0], mapping),NO.find_nodes_in_this_motif(csms[i1][0], mapping)) == False and \
+                            NO.intersection(list(csms[i1][1]),NO.find_nodes_in_this_motif(csms[j1][0], mapping)) and j1 > i1 and \
+                            NO.intersection(NO.find_nodes_in_this_motif(csms[i1][0], mapping),NO.find_nodes_in_this_motif(csms[j1][0], mapping)) == False:
+                        ignore.append([csms[i1], csms[j1]])
+                        ignore.append([csms[j1], csms[i1]])
+                        bool = True
                         break
-                    if NO.intersection(list(csms[j1][1]), NO.find_nodes_in_this_motif(csms[i1][0], mapping)) and i1 > j1:
-                        bool=True
+
+
+
+                    elif NO.intersection(list(csms[i1][1]), NO.find_nodes_in_this_motif(csms[j1][0], mapping)) and j1 > i1 and \
+                            NO.intersection(NO.find_nodes_in_this_motif(csms[i1][0], mapping),
+                                         NO.find_nodes_in_this_motif(csms[j1][0], mapping)) == False:
+                        bool1 = True
+                        bool = True
+
                         break
-            if bool==True:
+
+                    elif NO.intersection(list(csms[j1][1]), NO.find_nodes_in_this_motif(csms[i1][0], mapping)) and i1 > j1 and \
+                            NO.intersection(NO.find_nodes_in_this_motif(csms[j1][0], mapping),
+                                         NO.find_nodes_in_this_motif(csms[i1][0], mapping)) == False:
+                        bool2 = True
+                        bool = True
+                        break
+
+                    if bool == False:
+                        done.append([csms[i1], csms[j1]])
+                        done.append([csms[j1], csms[i1]])
+
+            if bool == True:
                 break
 
-
-
-        if bool==False:
+        if (len(swap) + len(ignore) + len(done)) / 2 == math.factorial(len(csms)) // math.factorial(
+                (len(csms) - 2)) // math.factorial(2):
             break
 
 
-        else:
 
-            for i in range(len(csms)):
-                for j in range(len(csms)):
-                    if i!=j:
-                        if NO.intersection(list(csms[i][1]),NO.find_nodes_in_this_motif(csms[j][0],mapping)) and j>i:
-                            csms[i],csms[j]=csms[j],csms[i]
-                            break
-                        if NO.intersection(list(csms[j][1]),NO.find_nodes_in_this_motif(csms[i][0],mapping)) and i>j:
-                            csms[j],csms[i]=csms[i],csms[j]
-                            break
+        else:
+            #print('here')
+            #print(csms[i1])
+            #print(csms[j1])
+            #print(list(csms[i1][1]))
+            #print(find_nodes_in_this_motif(csms[j1][0], mapping))
+
+            if bool1 == True:
+                csms[i1], csms[j1] = csms[j1], csms[i1]
+                swap.append([csms[j1], csms[i1]])
+                swap.append([csms[i1], csms[j1]])
+            elif bool2 == True:
+                csms[j1], csms[i1] = csms[i1], csms[j1]
+                swap.append([csms[j1], csms[i1]])
+                swap.append([csms[i1], csms[j1]])
 
 
 
     return csms
-
-
-
-
-
-
-
-
-
 
 
 def self_consitence_check(comp,cycles_mapping,mapping):
@@ -280,8 +307,8 @@ def csm_finder_positive_edges(cycles, mapping,write_cycle_graph):
         item[1] = set(rc)
 
 
-
-    csms = order(csms, mapping)
+    if csms!=[] and len(csms)>=2:
+        csms = order(csms, mapping)
     csms = csms + single_cycles_not_in_any_SCC
 
     return csms
@@ -437,6 +464,7 @@ def csm_finder_general_function(cycles, mapping, G_expanded,write_cycle_graph):
                 csms.append([buffer, set(remaining_conds)])
 
         else:
+
             broken_csms=break_the_SCC(item)
             if broken_csms!=[]:
                 csms+=break_the_SCC(item)
@@ -582,9 +610,11 @@ def csm_finder_general_function(cycles, mapping, G_expanded,write_cycle_graph):
 
 
     csms = csms + fishy
-    csms = order(csms, mapping)
+    if csms!=[] and len(csms)>=2:
+        csms = order(csms, mapping)
     csms = csms + single_cycles_not_in_any_SCC
-
+    #print('csms')
+    #print(csms)
     return csms
 
 
