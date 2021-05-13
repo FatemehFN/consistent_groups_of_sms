@@ -78,7 +78,8 @@ def construct_relationships_network(lines,rules,write_cycle_graph):
 
     sm_list=copy.deepcopy(SMO.stable_motifs(rules))
 
-
+    print('stable motifs')
+    print(sm_list)
 
     #add the SM nodes to G_rel
     for item in sm_list:
@@ -108,9 +109,9 @@ def construct_relationships_network(lines,rules,write_cycle_graph):
                         done.append([m,q])
                         done.append([q,m])
                 if m!=q and set(nodes_in_all_motifs[q]).issubset(set(nodes_in_all_motifs[m]+DOIs[m])):
-                    G_rel.add_edge(G_rel.nodes()[q], G_rel.nodes()[m], relationship='DOI')
+                    G_rel.add_edge(G_rel.nodes()[m],G_rel.nodes()[q],  relationship='DOI')
                 if m!=q and set(nodes_in_all_motifs[m]).issubset(set(nodes_in_all_motifs[q]+DOIs[q])):
-                    G_rel.add_edge(G_rel.nodes()[m], G_rel.nodes()[q], relationship='DOI')
+                    G_rel.add_edge(G_rel.nodes()[q],G_rel.nodes()[m],  relationship='DOI')
 
 
 
@@ -152,19 +153,20 @@ def construct_relationships_network(lines,rules,write_cycle_graph):
     found_counter_array = []
     while (found_counter != len(csms)):
 
-        if found_counter != [] and len(found_counter_array) >= 2:
+        if found_counter != 0 and len(found_counter_array) >= 2:
             if found_counter_array[-1] == found_counter_array[-2]:
                 break
 
         for ind in range(len(csms)):
 
             if ind not in found_index:
-                #print('\n')
-                #print(csms[ind])
+                print('\n')
+                print('csm')
+                print(csms[ind])
                 support_dict = SMO.find_supports(csms[ind], mapping, G_expanded, G_rel,FVS_size,list_of_names, number_of_neg_edges)
 
-                #print('psupports')
-                #print(support_dict)
+                print('supports')
+                print(support_dict)
                 if support_dict != []:
                     found_counter = found_counter + 1
                     found_index.append(ind)
@@ -180,24 +182,26 @@ def construct_relationships_network(lines,rules,write_cycle_graph):
 
                         primary_sm = primary_sm + succ
                         name= NO.turn_to_name([succ1])
-                        G_rel.add_nodes_from(name)
+                        if name[0] not in G_rel.nodes():
+                            G_rel.add_nodes_from(name)
                         len_rel_node.update({name[0]: pp[1]})
                         nx.set_node_attributes(G_rel, 'number of sms', len_rel_node)
                         n = NO.find_nodes_in_this_motif(succ1, mapping)
                         doi_n = find_DOIs(G_expanded, n)
 
-                        for m in range(len(nodes_in_all_motifs)):
-                            if NO.intersection_negation(n, nodes_in_all_motifs[m]):
-                                G_rel.add_edge(G_rel.nodes()[m], name[0], relationship='mutual exclusivity')
-                                G_rel.add_edge(name[0], G_rel.nodes()[m], relationship='mutual exclusivity')
+                        for m in G_rel.nodes():
+                            if m != name[0]:
+                                node_number_m = NO.find_nodes_in_this_motif(NO.turn_string_to_dict_pl_po(m),mapping)
+                                if NO.intersection_negation(n, node_number_m):
+                                    G_rel.add_edge(m, name[0], relationship='mutual exclusivity')
+                                    G_rel.add_edge(name[0], m, relationship='mutual exclusivity')
 
-                            if set(n).issubset(set(nodes_in_all_motifs[m] + DOIs[m])):
-                                G_rel.add_edge(name[0], G_rel.nodes()[m], relationship='DOI')
-                            if set(nodes_in_all_motifs[m]).issubset(set(n + doi_n)):
-                                G_rel.add_edge(G_rel.nodes()[m], name[0], relationship='DOI')
+                                if set(n).issubset(set(node_number_m + find_DOIs(G_expanded, node_number_m))):
+                                    G_rel.add_edge( m,name[0], relationship='DOI')
+                                if set(node_number_m).issubset(set(n + doi_n)):
+                                    G_rel.add_edge(name[0],m,  relationship='DOI')
 
-                        nodes_in_all_motifs.append(n)
-                        DOIs.append(doi_n)
+
 
         found_counter_array.append(found_counter)
 
@@ -267,7 +271,9 @@ def consistent_cycles(G_expanded):
                     buffer[i.replace('~', '')] = 0
                 else:
                     buffer[i] = 1
-        formatted_M_list.append([buffer, set(item[1])])
+        if [buffer, set(item[1])] not in formatted_M_list:
+            formatted_M_list.append([buffer, set(item[1])])
+
 
 
 
