@@ -1,0 +1,9 @@
+#BOOLEAN RULES
+A*=B
+B*=C and not A
+C*=B
+D*=C and not E
+E*=D or F
+F*=E
+G*=H
+H*=C
