@@ -1,8 +1,6 @@
 import attrs_operations as AO
 import model_operations as MO
 import relationship_operations as RO
-import FVS
-import BooleanDOI_processing as BDOIp
 import PyBoolNet
 
 
