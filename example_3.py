@@ -24,7 +24,7 @@ f1.close()
 
 
 
-#build cycle graph using virtual nodes of expanded network 
+#build cycle graph using virtual nodes of expanded network
 cycle_graph=SMO.cycle_graph_virtual_node_based(lines,write_cycle_graph=True)
 
 
