@@ -808,7 +808,7 @@ def cycle_graph_virtual_node_based(lines,write_cycle_graph=False):
 
     print('cycle mapping')
     for item in cycles_mapping:
-        print(item)
+        print(item,cycles_mapping[item])
 
 
     key_list = list(cycles_mapping.keys())  # c1 c2
