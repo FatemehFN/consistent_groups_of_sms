@@ -14,9 +14,6 @@ import copy
 
 
 
-
-
-
 def construct_relationships_network(lines,rules,write_cycle_graph):
 
 
@@ -43,13 +40,6 @@ def construct_relationships_network(lines,rules,write_cycle_graph):
     #build the expanded network
     prefix, suffix = 'n', ''
     G_expanded=BDOIp.Get_expanded_network(Gread,prefix=prefix,suffix=suffix)
-
-
-
-
-
-
-
 
     #calculate the mapping from string nodename to index
     mapping={}              #nodename to number index
@@ -95,8 +85,6 @@ def construct_relationships_network(lines,rules,write_cycle_graph):
     nx.set_node_attributes(G_rel, 'number of sms', len_rel_node)
 
 
-
-
     #add the G_rel edges
     done=[]
     for q in range (len(nodes_in_all_motifs)):
@@ -115,10 +103,7 @@ def construct_relationships_network(lines,rules,write_cycle_graph):
 
 
 
-
-
     list_of_names = G_rel.nodes()
-
 
 
     #consistent cycles of expanded network
@@ -205,9 +190,6 @@ def construct_relationships_network(lines,rules,write_cycle_graph):
 
         found_counter_array.append(found_counter)
 
-
-
-
     alpha=[]
     for rel_node in G_rel.nodes():
 
@@ -218,13 +200,6 @@ def construct_relationships_network(lines,rules,write_cycle_graph):
 
     alpha=dict(ChainMap(*alpha))
     nx.set_node_attributes(G_rel, 'alpha', alpha)
-
-
-
-
-
-
-
 
     return G_rel,list_of_names
 
@@ -260,8 +235,6 @@ def consistent_cycles(G_expanded):
                         conditions.append(cc)
         M_list.append([m, conditions])
 
-
-
     formatted_M_list = []
     for item in M_list:
         buffer = {}
@@ -276,27 +249,7 @@ def consistent_cycles(G_expanded):
 
 
 
-
-
-
     return formatted_M_list
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -355,6 +308,7 @@ def check_for_mutual_exclusivity_in_a_comb(comb,G_rel):
     return False
 
 
+
 def check_for_mutual_exclusivity(comb1, comb2, G_rel):
     # returns a boolean value showing if two combinations of stable motifs and motif groups are consistent or not
     # to find this, it uses the info stored in G_rel edges
@@ -371,6 +325,7 @@ def check_for_mutual_exclusivity(comb1, comb2, G_rel):
                 if G_rel[comb1[i][0]][comb2[j][0]]['relationship'] == 'mutual exclusivity':
                     return True
     return False
+
 
 
 def DOI_check(comb,G_rel):
@@ -397,9 +352,6 @@ def DOI_check(comb,G_rel):
                             if G_rel [comb[j]][comb[i]]['relationship']=='DOI':
                                 return True
     return False
-
-
-
 
 
 
@@ -441,10 +393,6 @@ def how_many_motifs(string,list_of_names):
 
 
 
-
-
-
-
 def is_subset(new_dict,support_dict,mapping):
 
     #returns a boolean value showing if any member of the list of previously found supports of a conditionally stable motif is a subset of a newly found one
@@ -463,8 +411,6 @@ def is_subset(new_dict,support_dict,mapping):
             return True
 
     return False
-
-
 
 
 
@@ -493,16 +439,12 @@ def repetition(list,mapping):
 
 
 
-
-
 def merge_mutual_DOIs(G_rel):
 
     #receives network of functional relationships and merges the nodes that have mutual LDOIs into one of them keeping the edges of those that are merged
     # going to and coming from the kept one
     #input: network of functional relationships G_rel in the form of a digraph object
     #output: network of functional relationships G_rel with nodes that have mutual LDOIs merged into one
-
-
 
 
     def mutual_DOI_detection(G_rel):
@@ -516,12 +458,33 @@ def merge_mutual_DOIs(G_rel):
 
 
 
-
     while True:
         [bool_mutual_DOI, items] = mutual_DOI_detection(G_rel)
         if bool_mutual_DOI==False:
             break
         else:
             G_rel=nx.contracted_nodes(G_rel,items[0][0],items[1][0])
+
+    '''
+    
+    def one_way_DOI_detection(G_rel):
+        for node1 in G_rel.nodes(data=True):
+            for node2 in G_rel.nodes(data=True):
+                if node1[0]!=node2[0]:
+                    if G_rel.has_edge(node1[0], node2[0]):
+                        if G_rel[node1[0]][node2[0]]['relationship'] == 'DOI':
+                            return [True,[node1,node2]]
+        return [False,[]]
+    
+    
+    
+    while True:
+        [bool_mutual_DOI, items] = one_way_DOI_detection(G_rel)
+        if bool_mutual_DOI==False:
+            break
+        else:
+            G_rel=nx.contracted_nodes(G_rel,items[0][0],items[1][0])'''
+
+
 
     return G_rel
