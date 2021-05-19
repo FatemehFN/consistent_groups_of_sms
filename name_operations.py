@@ -46,9 +46,6 @@ def number_of_negative_edges_text(lines):
 
 
 
-
-
-
 def turn_string_to_list_n(rel_node,mapping):
 
     #returns a list of node states in 'number index' notation
@@ -57,7 +54,7 @@ def turn_string_to_list_n(rel_node,mapping):
     #rel_node: a string such as 'pl_0p=0;po_0p=0;pl_1p=0;po_1p=0;' in pl-po notation
     #mapping: a dictionary mapping from pl-po notation to 'number index' notation
 
-    #output: a list of node states in 'index number' notation  such as [~n1n, ~n2n, ~n3n, ~n4n]
+    #output: a list of node states in 'number index' notation  such as [~n1n, ~n2n, ~n3n, ~n4n]
 
     nodes_in_this_motif = []
     nodes_in_this_motif_node_number = []
@@ -74,9 +71,6 @@ def turn_string_to_list_n(rel_node,mapping):
             nodes_in_this_motif.append('~' + node)
 
     return nodes_in_this_motif_node_number
-
-
-
 
 
 
@@ -108,14 +102,14 @@ def turn_string_to_dict_pl_po(string):
 
 def find_nodes_in_this_motif(primary, mapping):
 
-    # returns a list of node states in 'index number' notation
+    # returns a list of node states in 'number index' notation
 
     # inputs:
     # primary: a dictionary of nodes and their states in the pl-po notation such as {pl_op:0, po_0p:0, pl_1p:0, po_1p:0} or
-    # in 'index number' notation such as {n1n:0, n2n:0, n3n:0, n4n:0}
+    # in 'number index' notation such as {n1n:0, n2n:0, n3n:0, n4n:0}
     # mapping: a dictionary mapping from pl-po notation to 'number index' notation
 
-    # output: a list of node states in 'index number' notation  such as [~n1n, ~n2n, ~n3n, ~n4n]
+    # output: a list of node states in 'number index' notation  such as [~n1n, ~n2n, ~n3n, ~n4n]
 
     nodes_in_this_motif_node_number = []
     for node in primary:
@@ -138,16 +132,10 @@ def find_nodes_in_this_motif(primary, mapping):
 
 
 
-
-
-
-
-
-
 def intersection(list1, list2):
 
     #returns a boolean value showing if two lists have mutual items or not.
-    #inout: two lists list1 and list2
+    #input: two lists list1 and list2
     #output: True if the two lists intersect, and False if they do not.
 
 
@@ -167,10 +155,12 @@ def intersection(list1, list2):
 
 
 
+
+
 def intersection_v2(list1, list2):
 
     #returns a boolean value showing if two lists have mutual nodes or not.
-    #inout: two lists list1 and list2
+    #input: two lists list1 and list2
     #output: True if the two lists intersect in a node (not node state), and False if they do not.
 
     result = False
@@ -190,10 +180,12 @@ def intersection_v2(list1, list2):
 
 
 
+
+
 def intersection_items(list1, list2):
 
     # returns the items that are mutual in list1 and list2
-    # inout: two lists list1 and list2
+    # input: two lists list1 and list2
     # output: the mutual items that are in both lists
 
 
@@ -210,9 +202,6 @@ def intersection_items(list1, list2):
 
 
     return result
-
-
-
 
 
 
