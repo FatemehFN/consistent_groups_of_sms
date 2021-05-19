@@ -51,14 +51,8 @@ def consistent_groups_of_sms(G_rel, list_of_names,lines):
 
 
 
-
-
     Gread, readnodes = BDOIp.form_network(lines, sorted_nodename=False)
     FVS_size = len(FVS.FVS(Gread))
-
-
-
-
 
 
     nodes = G_rel.nodes(data=True)[::-1]
@@ -80,9 +74,7 @@ def consistent_groups_of_sms(G_rel, list_of_names,lines):
                     attrs.append([item])
 
 
-
-
-    #biuld consistent groups of non-zero alpha motifs/motif groups
+    #build consistent groups of non-zero alpha motifs/motif groups
     if len(alpha_non_zero_nodes) > FVS_size:
         r = FVS_size
     else:
@@ -102,20 +94,16 @@ def consistent_groups_of_sms(G_rel, list_of_names,lines):
                 combs.append(item)
 
 
-    self_consistant_combs = []
+    self_consistent_combs = []
     for comb in combs:
         if RO.check_for_mutual_exclusivity_in_a_comb([x[0] for x in comb],G_rel)==False:
-            self_consistant_combs.append(comb)
+            self_consistent_combs.append(comb)
 
 
+    self_consistent_combs.sort(key=len)
+    self_consistent_combs = self_consistent_combs[::-1]
 
-
-
-
-    self_consistant_combs.sort(key=len)
-    self_consistant_combs = self_consistant_combs[::-1]
-
-    for SCcom in self_consistant_combs:
+    for SCcom in self_consistent_combs:
         if is_new_attractor(SCcom,attrs,G_rel)==True:
             attrs.append(SCcom)
 
@@ -124,7 +112,7 @@ def consistent_groups_of_sms(G_rel, list_of_names,lines):
     # To add the alpha non zeros that cannot be combined with anything else (oscillations)
     for node in alpha_non_zero_nodes:
         check_var = True
-        for comparison_item1 in self_consistant_combs:
+        for comparison_item1 in self_consistent_combs:
             if node in comparison_item1:
                 check_var = False
 
