@@ -5,7 +5,7 @@ import relationship_operations as RO
 import networkx as nx
 import itertools
 import BooleanDOI_processing as BDOIp
-import model_operations as MO
+
 
 
 def map(cycles):
@@ -26,8 +26,6 @@ def map(cycles):
 
 
 
-
-
 def stable_motifs(r):
 
 
@@ -45,11 +43,7 @@ def stable_motifs(r):
 
 
 
-
-
-
-
-def order(csms,mapping):
+def order(csms,mapping,bridge):
 
 
     #pre-checks for the possibility of one csm containing the condition of another and sorts them accordingly
@@ -58,6 +52,7 @@ def order(csms,mapping):
     #inputs:
     #csms: list of conditionally stable motifs
     #mapping: a dictionary mapping from pl-po notation to 'number index' notation
+    #bridge: intersection of the LDOI of active stable motifs and virtual nodes inside the maximal SCCs
 
     #output: the ordered list of conditionally stable motifs
 
@@ -68,7 +63,7 @@ def order(csms,mapping):
     while True:
         bool = False
         bool1 = False
-        Bool2 = False
+        bool2 = False
 
         for i1 in range(len(csms)):
 
@@ -135,7 +130,9 @@ def order(csms,mapping):
     return csms
 
 
-def self_consitence_check(comp,cycles_mapping,mapping):
+
+
+def self_consistence_check(comp,cycles_mapping,mapping):
 
     #returns True if an SCC in the cycle graph is consistent, and False otherwise
     #inputs:
@@ -156,11 +153,6 @@ def self_consitence_check(comp,cycles_mapping,mapping):
 
 
 
-
-
-
-
-
 def csm_finder_positive_edges(cycles, mapping,write_cycle_graph):
 
 
@@ -173,9 +165,6 @@ def csm_finder_positive_edges(cycles, mapping,write_cycle_graph):
 
     # output:
     # the ordered list of inactive csms
-
-
-
 
 
     cycle_graph = nx.DiGraph()
@@ -227,32 +216,20 @@ def csm_finder_positive_edges(cycles, mapping,write_cycle_graph):
 
 
 
-
-
     if write_cycle_graph==True:
         nx.write_gml(cycle_graph, 'cycle_graph' + '.gml')
 
 
 
-
-
     cycle_graph_scc = [x for x in list(nx.strongly_connected_components(cycle_graph)) if len(x) > 1]
-
-
-
 
     csms = []
     SCCs_of_cycle_graph_including_sms = []
 
 
-
-
-
-
-
     # this loop gives the maximal sccs that are CSMs
     for item in cycle_graph_scc:
-        if self_consitence_check(item,cycles_mapping,mapping) == True:
+        if self_consistence_check(item,cycles_mapping,mapping) == True:
             buffer = {}
             buffer_cond = set()
             remaining_conds = []
@@ -276,7 +253,6 @@ def csm_finder_positive_edges(cycles, mapping,write_cycle_graph):
     for item in conditional_cycles:
 
 
-
             position_item = val_list.index(item)
 
             if item not in single_cycles_not_in_any_SCC:
@@ -297,8 +273,6 @@ def csm_finder_positive_edges(cycles, mapping,write_cycle_graph):
                     single_cycles_not_in_any_SCC.append(item)
 
 
-
-
     # fixing the conditions for this set
     for item in single_cycles_not_in_any_SCC:
         rc = []
@@ -308,13 +282,11 @@ def csm_finder_positive_edges(cycles, mapping,write_cycle_graph):
         item[1] = set(rc)
 
 
-    if csms!=[] and len(csms)>=2:
-        csms = order(csms, mapping)
+    #if csms!=[] and len(csms)>=2: #this does not need an order
+        #csms = order(csms, mapping)
     csms = csms + single_cycles_not_in_any_SCC
 
     return csms
-
-
 
 
 
@@ -371,8 +343,6 @@ def csm_finder_general_function(cycles, mapping, G_expanded,write_cycle_graph):
                         and NO.intersection_negation(list(conditional_cycles[j][1]),NO.find_nodes_in_this_motif(conditional_cycles[i][0], mapping))==False:
 
 
-
-
                         if NO.intersection(list(conditional_cycles[i][1]),NO.find_nodes_in_this_motif(conditional_cycles[j][0], mapping)) == True:
 
 
@@ -398,20 +368,11 @@ def csm_finder_general_function(cycles, mapping, G_expanded,write_cycle_graph):
 
 
 
-
-
-
-
     cycle_graph_scc = [x for x in list(nx.strongly_connected_components(cycle_graph)) if len(x) > 1]
-
-
 
 
     csms = []
     SCCs_of_cycle_graph_including_sms = []
-
-
-
 
 
     def break_the_SCC(item): #item: {'c15', 'c14'}
@@ -448,7 +409,7 @@ def csm_finder_general_function(cycles, mapping, G_expanded,write_cycle_graph):
 
     # this loop gives the maximal sccs that are CSMs
     for item in cycle_graph_scc:
-        if self_consitence_check(item,cycles_mapping,mapping) == True:
+        if self_consistence_check(item,cycles_mapping,mapping) == True:
             buffer = {}
             buffer_cond = set()
             remaining_conds = []
@@ -469,8 +430,6 @@ def csm_finder_general_function(cycles, mapping, G_expanded,write_cycle_graph):
             broken_csms=break_the_SCC(item)
             if broken_csms!=[]:
                 csms+=break_the_SCC(item)
-
-
 
 
     # finding the cycles that did not participate in cycle graph SCC
@@ -577,8 +536,7 @@ def csm_finder_general_function(cycles, mapping, G_expanded,write_cycle_graph):
                         allowed_cycles.append(c)
 
 
-                if len(item) == len(
-                        allowed_cycles):  # means all the cycles inside this scc are allowed and this scc does not have the bridge in it
+                if len(item) == len(allowed_cycles):  # means all the cycles inside this scc are allowed and this scc does not have the bridge in it
                     continue
 
                 intermediate += list(nx.strongly_connected_components(cycle_graph.subgraph(allowed_cycles)))
@@ -608,35 +566,15 @@ def csm_finder_general_function(cycles, mapping, G_expanded,write_cycle_graph):
                     fishy.append(SCS)
 
 
-
-
     csms = csms + fishy
     if csms!=[] and len(csms)>=2:
-        csms = order(csms, mapping)
+        csms = order(csms, mapping,bridge)
+
+
+
     csms = csms + single_cycles_not_in_any_SCC
-    #print('csms')
-    #print(csms)
+
     return csms
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -672,11 +610,6 @@ def find_supports(csm, mapping, G_expanded, G_rel,FVS_size,list_of_names, number
     for i in range (1,FVS_size):
 
 
-
-
-
-
-
         combo_index+=list(itertools.combinations(l, i))
 
         for item in combo_index:
@@ -684,8 +617,6 @@ def find_supports(csm, mapping, G_expanded, G_rel,FVS_size,list_of_names, number
             string = ''
             for n in item:
                 string += G_rel_nodes[n][0]
-
-
 
 
             if RO.check_for_mutual_exclusivity_in_a_comb([G_rel_nodes[x][0] for x in item],G_rel)==False:
@@ -697,8 +628,6 @@ def find_supports(csm, mapping, G_expanded, G_rel,FVS_size,list_of_names, number
                     if RO.how_many_motifs(string, list_of_names) == i:
 
 
-
-
                         #find the node combo complete list and its DOI
                         nodes_n_all=NO.turn_string_to_list_n(string,mapping)
                         DOI=RO.find_DOIs(G_expanded,nodes_n_all)
@@ -707,9 +636,6 @@ def find_supports(csm, mapping, G_expanded, G_rel,FVS_size,list_of_names, number
 
                         #check if the DOI U node combo includes the conditions of the csm
                         if csm[1].issubset(set(DOI + nodes_n_all)): #and \
-
-
-
 
                             if NO.intersection_v2(list(csm[0]), nodes_n_all) == False and NO.intersection_negation(list(csm[1]), RO.find_DOIs_residue(G_expanded, nodes_n_all)) == False:
 
@@ -720,14 +646,7 @@ def find_supports(csm, mapping, G_expanded, G_rel,FVS_size,list_of_names, number
 
 
 
-
-
     return support_dict
-
-
-
-
-
 
 
 
@@ -747,8 +666,6 @@ def cycle_graph_virtual_node_based(lines,write_cycle_graph=False):
     #output: writes cycle graph in a gml file.
 
 
-
-
     # build the network from the lines
     Gread, readnodes = BDOIp.form_network(lines, sorted_nodename=False)
 
@@ -756,9 +673,6 @@ def cycle_graph_virtual_node_based(lines,write_cycle_graph=False):
     # build the expanded network
     prefix, suffix = 'n', ''
     G_expanded = BDOIp.Get_expanded_network(Gread, prefix=prefix, suffix=suffix)
-
-
-
 
 
     # calculate the mapping from string nodename to index
@@ -772,9 +686,6 @@ def cycle_graph_virtual_node_based(lines,write_cycle_graph=False):
         inverse_mapping['~' + index] = '~' + node
 
 
-
-
-
     # add composite node to node mapping
     for node in G_expanded.nodes():
         if node not in mapping:
@@ -784,21 +695,11 @@ def cycle_graph_virtual_node_based(lines,write_cycle_graph=False):
             inverse_mapping[node] = composite_node
 
 
-
-
-
     cycles = RO.consistent_cycles(G_expanded)
     conditional_cycles=[x for x in cycles if len(x[1]) != 0]
 
 
-
-
-
-
-
     cycle_graph = nx.DiGraph()
-
-
 
 
     cycles_mapping = {}
@@ -813,10 +714,6 @@ def cycle_graph_virtual_node_based(lines,write_cycle_graph=False):
 
     key_list = list(cycles_mapping.keys())  # c1 c2
     val_list = list(cycles_mapping.values())  # list of csms
-
-
-
-
 
 
 
@@ -835,8 +732,6 @@ def cycle_graph_virtual_node_based(lines,write_cycle_graph=False):
                             and NO.intersection_negation(list(sc[1]), NO.find_nodes_in_this_motif(tc[0],mapping)) == False \
                             and NO.intersection_negation(list(tc[1]),NO.find_nodes_in_this_motif(sc[0],mapping)) == False:
 
-
-
                         position_sc = val_list.index(sc)
                         position_tc = val_list.index(tc)
 
@@ -850,8 +745,6 @@ def cycle_graph_virtual_node_based(lines,write_cycle_graph=False):
 
     if write_cycle_graph==True:
         nx.write_gml(cycle_graph, 'cycle_graph.gml')
-
-
 
 
     return cycle_graph
