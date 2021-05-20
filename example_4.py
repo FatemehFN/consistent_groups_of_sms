@@ -4,19 +4,17 @@ import relationship_operations as RO
 import PyBoolNet
 
 
-plant=50
-pollinator=50
-network_number=953
-file_name=str(plant)+'_'+str(pollinator)+'_'+str(network_number)
+
+file_name='model_2.txt'
 
 
 
 #read the text file of the Boolean model
-f=open('plant_pollinator_models/'+file_name+'_less.txt')
+f=open('plant_pollinator_like_models/'+file_name,'r')
 lines=f.readlines()
 f.close()
 
-f1=open('plant_pollinator_models/'+file_name+'_less.txt')
+f1=open('plant_pollinator_like_models/'+file_name,'r')
 rules=f1.read()
 f1.close()
 
