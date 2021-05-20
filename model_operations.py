@@ -20,11 +20,13 @@ def mapping(x):
 
 
 
-def disjunctive_prime_form_text_file(G, network_number, plant, pollinator, IC, write_IC, perturb, wp,request_for_p_n_edges):
+def disjunctive_prime_form_text_file(G, network_number, plant, pollinator, IC_number=0,
+                                     IC=[], write_IC=False, perturb=False, wp=0,request_for_p_n_edges=False):
 
     #writes the Boolean functions of a pl-po threshold model in disjunctive prime form in a text file
     #if request_for_p_n_edges==True it returns the number of remaining positive and negative edges after converting to disjunctive
     #prime form, otherwise doesn't return anything.
+    #this is currently hard coded for positive weight of 4 and negative weight of -1 for the Campbell et al. model.
 
     #inputs:
     #G: the original digraph including all prositive and negative edges. This object is taken from Colin's ensembles
@@ -48,8 +50,18 @@ def disjunctive_prime_form_text_file(G, network_number, plant, pollinator, IC, w
     perturbed_to_be_true = name_of_remained_nodes[0:int((plant + pollinator) * wp)]
 
 
-    address='rules_not_needed/disjunctive_prime_form_' + str(plant) + '_' + str(pollinator) + '_' + str(network_number) + '.txt'
-    f = open(address, 'w')
+    address='disjunctive_prime_form_' + str(plant) + '_' + str(pollinator) + '_' + str(network_number)
+    if write_IC==True:
+        address+='_IC'+str(IC_number)
+    f = open(address+'.txt', 'w')
+
+
+
+
+
+
+
+
 
 
 
@@ -174,8 +186,6 @@ def disjunctive_prime_form_text_file(G, network_number, plant, pollinator, IC, w
 
 
 
-
-
 def find_false_nodes(G):
 
     #finds the species that cannot establish under any circumstances and become extinct in all attractors. Figure 2 on the paper describes these nodes.
@@ -242,9 +252,8 @@ def find_false_nodes(G):
 
 
 
-
-
-def simplification_text_file(G,network_number,plant,pollinator,IC,IC_number,write_IC,more,less,perturb,wp):
+def simplification_text_file(G,network_number,plant,pollinator,IC=[],IC_number=0,
+                             write_IC=False,more=False,less=True,perturb=False,wp=0):
 
 
     #simplifies and writes the Boolean functions of a pl-po threshold model in disjunctive prime form in a text file. simplification method is
@@ -252,6 +261,7 @@ def simplification_text_file(G,network_number,plant,pollinator,IC,IC_number,writ
     #both directions of the inequality discussed in the paper are implemented in this function. 'less' stands for 'keeping less negative edges' in the
     # final Boolean function when p_b>=p_t (the case we decided to go with), and 'more' stands for 'keeping more negative edges' in the
     # final Boolean function when p_b<=p_t
+    #this is currently hard coded for positive weight of 4 and negative weight of -1 for the Campbell et al. model.
 
 
     #inputs:
@@ -260,8 +270,8 @@ def simplification_text_file(G,network_number,plant,pollinator,IC,IC_number,writ
     #plant: the number of plants in the network
     #pollinator: the number of pollinators in the network
     #write_IC: if True, the function writes initial conditions at the beginning of the text file
-    #IC: initial conditions in the form of a list of 0s and 1s showing what the state of each species is at t=0. This is only implemented if one
-    #wants to try synchronous update or study perturbations.
+    #IC: initial conditions in the form of a list of 0s and 1s showing what the state of each species is at t=0.
+    #This is only implemented if one wants to try synchronous update or perturbations.
     #perturb: if True, the perturbed version of the Boolean functions are written within the text file
     #wp: weight of the perturbation. for example if set to 0.3 in a network of 100 nodes, 30 nodes will be perturbed to their active states.
 
@@ -276,11 +286,13 @@ def simplification_text_file(G,network_number,plant,pollinator,IC,IC_number,writ
     length = len(nodes)
     name_of_nodes = [item[0] for item in nodes]
 
+
+
+    string='simplified_'+str(plant) + '_' + str(pollinator) + '_' + str(network_number)
     if write_IC==True:
-        string=str(plant) + '_' + str(pollinator) + '_' + str(network_number) + '_IC'+str(IC_number)
-    else:
-        string = str(plant) + '_' + str(pollinator) + '_' + str(network_number)
-        #string='rules_not_needed/'+str(plant) + '_' + str(pollinator) + '_' + str(network_number)
+        string+= '_IC'+str(IC_number)
+
+
 
 
 
@@ -298,7 +310,7 @@ def simplification_text_file(G,network_number,plant,pollinator,IC,IC_number,writ
     false_nodes = []
     df = pd.DataFrame(nodes)
 
-    f2.write('#BOOLEAN RULES'+'\n') #if one wants to run Jorge's java stable motif code on the output of this function, this line is necessary.
+    #f2.write('#BOOLEAN RULES'+'\n') #if one wants to run Jorge's java stable motif code on the output of this function, this line is necessary.
 
 
 
@@ -365,6 +377,9 @@ def simplification_text_file(G,network_number,plant,pollinator,IC,IC_number,writ
                 if len_p == 0:
                     df = df.drop(j)
                     false_nodes.append(name_of_remained_nodes[j])
+
+
+    print('species that cannot establish')
     print(false_nodes)
     perturbed_to_be_true=name_of_remained_nodes[0:int((plant+pollinator)*wp)]
     nodes = list(G.nodes(data=True))
@@ -499,11 +514,10 @@ def simplification_text_file(G,network_number,plant,pollinator,IC,IC_number,writ
                     if less==True:
                         f2.write(char_less+'\n')
 
-
-
-
-
-
+    if more==True:
+        f1.close()
+    if less==True:
+        f2.close()
 
 
 
