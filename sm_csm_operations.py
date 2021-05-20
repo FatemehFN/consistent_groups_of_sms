@@ -309,8 +309,13 @@ def csm_finder_general_function(cycles, mapping, G_expanded,write_cycle_graph):
     # output:
     # the ordered list of csms
 
+    #extras:
+    #bridge_list: a list of lists. Each list is the intersection of LDOI of one active SM and the virtual nodes inside the maximal
+    # CSM (S_i in the paper)
+    #keep: the intermediate CSMs that might have a support and we need to keep
 
-    fishy=[]
+
+    keep=[]
 
     cycle_graph = nx.DiGraph()
     cycle_graph_ME=nx.DiGraph()
@@ -561,12 +566,12 @@ def csm_finder_general_function(cycles, mapping, G_expanded,write_cycle_graph):
 
             for SCS in all_intermediate_SCSs:
 
-                if len(SCS[1]) != 0 and SCS not in csms and SCS not in fishy:
+                if len(SCS[1]) != 0 and SCS not in csms and SCS not in keep:
 
-                    fishy.append(SCS)
+                    keep.append(SCS)
 
 
-    csms = csms + fishy
+    csms = csms + keep
     if csms!=[] and len(csms)>=2:
         csms = order(csms, mapping,bridge)
 
