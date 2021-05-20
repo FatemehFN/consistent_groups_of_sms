@@ -1,51 +1,53 @@
-import attrs_operations as AO
+import pickle
+import numpy as np
 import model_operations as MO
-import relationship_operations as RO
-import PyBoolNet
 
 
 plant=30
 pollinator=25
 network_number=266
-file_name=str(plant)+'_'+str(pollinator)+'_'+str(network_number)
 
 
-
-#read the text file of the Boolean model
-f=open('plant_pollinator_models/'+file_name+'_less.txt')
-lines=f.readlines()
+f = open('graphlist'+str(plant)+'_'+str(pollinator)+'.data', 'rb')
+graphlist = pickle.load(f, encoding='latin1')
 f.close()
 
-f1=open('plant_pollinator_models/'+file_name+'_less.txt')
-rules=f1.read()
-f1.close()
 
 
-#number of negative edges in the model
-print('number of negative edges in the model')
-print(MO.number_of_negative_edges_text(lines))
-
-
-
-
-# number of minimal trap spaces from consistent groups of sms
-
-G_rel,list_of_names=RO.construct_relationships_network(lines,rules,write_cycle_graph=False)
-
-attrs,len_attrs=AO.consistent_groups_of_sms(G_rel,list_of_names,lines)
-print('number of minimal trap spaces from consistent groups of sms:')
-print(len_attrs)
+#initial conditions and perturbation parameters if needed
+IC=np.ones((plant+pollinator,), dtype=int)
+IC=list(IC)
+IC_number=100
+write_IC=False
+more=False
+less=True
+wp=0.1
+perturb=False
 
 
 
+G = graphlist[network_number]
+
+
+print('the edges in the network')
+for edge in G.edges(data=True):
+    print(edge)
+
+
+#generates the Boolean functions in disjunctive prime form in a text file
+MO.disjunctive_prime_form_text_file(G,network_number,plant,pollinator)
 
 
 
+#example of adding initial conditions and perturbations to the text file
+#MO.disjunctive_prime_form_text_file(G,network_number,plant,pollinator,write_IC=write_IC,
+# request_for_p_n_edges=False,perturb=perturb,IC=IC,wp=wp,IC_number=IC_number)
 
-# number of minimal trap spaces from PyBoolNet
-rules = rules.replace(' *=', ',\t').replace('*=', ',\t').replace('not ', '!').replace(' and ', ' & ').replace(
-    ' or ', ' | ').replace('False', '0').replace('#BOOLEAN RULES','')
-primes = PyBoolNet.FileExchange.bnet2primes(rules)
-mints = PyBoolNet.AspSolver.trap_spaces(primes, "min", MaxOutput=2000)
-print('number of minimal trap spaces from PyBoolNet:')
-print(len(mints))
+
+#generates the simplified Boolean model according to the method described in the paper and writes the update functions in a text file
+MO.simplification_text_file(G,network_number,plant,pollinator)
+
+
+#example of adding initial conditions and perturbations to the text file
+#MO.simplification_text_file(G,network_number,plant,pollinator,IC=IC,IC_number=IC_number,write_IC=write_IC,
+# more=more,less=less,perturb=perturb,wp=wp)
