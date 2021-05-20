@@ -1,7 +1,7 @@
-
+import attrs_operations as AO
 import model_operations as MO
-import sm_csm_operations as SMO
-
+import relationship_operations as RO
+import PyBoolNet
 
 
 plant=30
@@ -21,11 +21,31 @@ rules=f1.read()
 f1.close()
 
 
+#number of negative edges in the model
+print('number of negative edges in the model')
+print(MO.number_of_negative_edges_text(lines))
 
 
 
-#build cycle graph using virtual nodes of expanded network
-cycle_graph=SMO.cycle_graph_virtual_node_based(lines,write_cycle_graph=True)
+
+# number of minimal trap spaces from consistent groups of sms
+
+G_rel,list_of_names=RO.construct_relationships_network(lines,rules,write_cycle_graph=False)
+
+attrs,len_attrs=AO.consistent_groups_of_sms(G_rel,list_of_names,lines)
+print('number of minimal trap spaces from consistent groups of sms:')
+print(len_attrs)
 
 
 
+
+
+
+
+# number of minimal trap spaces from PyBoolNet
+rules = rules.replace(' *=', ',\t').replace('*=', ',\t').replace('not ', '!').replace(' and ', ' & ').replace(
+    ' or ', ' | ').replace('False', '0').replace('#BOOLEAN RULES','')
+primes = PyBoolNet.FileExchange.bnet2primes(rules)
+mints = PyBoolNet.AspSolver.trap_spaces(primes, "min", MaxOutput=2000)
+print('number of minimal trap spaces from PyBoolNet:')
+print(len(mints))
