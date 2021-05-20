@@ -27,6 +27,7 @@ mapping provides this information from the node names (original notation) to num
 reverse mapping provides the mapping from the number index notation to node names (original notation)
 
 Consistent cycles and conditionally stable motifs are stored in this format: [{'n1': 0, 'n2': 0}, {'~n3', '~n0'}]. 
+
 The first item is a dictionary of nodes and their states in that consistent cycle/consitionally stable motif, and the second item is a set of conditions with '~' showing the inactive state. It is stored in this format so that it would be easier to check if this set is a subset of LDOI of a set of node states. 
 
 
