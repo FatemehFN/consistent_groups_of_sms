@@ -8,7 +8,7 @@ This algorithm generates the consistent groups of stable motifs and conditionall
 
 The function `form_network()` from the module `BooleanDOI_processing` reads the Boolean functions from a text file and constructs the network accordingly. The network is stored in a networkx DiGraph object. This function assigns a new name in the format of *n*+ a number + *n* to each node.
 
-
+```
 Example
 
 pl_1*=po_1
@@ -17,7 +17,7 @@ po_1*=pl_1
 original notation          number index
         pl_1                    n1n
         po_1                    n2n
-
+```
 
 
 The network that is constructed from the text file of the Boolean functions is in 'number index' notation
@@ -38,7 +38,7 @@ The first item is a dictionary of nodes and their states in that consistent cycl
 
 
 
-# II) Instructions
+## II) Instructions
 
 There are several python files with examples. 
 
