@@ -13,10 +13,18 @@ There are model examples of plant-pollinator and plant-pollinator like networks 
 1. **plant_pollinator_models** is a directory that has several plant-pollinator models stroed in text files. The name of each text file consistes of thress number separated with an undeline. These numbers show the number of plants in that network, the number of pollinators in that network, and the network ID in the ensemble respectively.
 2. **plant_pollinator_like_models** is a directory that has network models with Boolean functions that follow the regularities in plant-pollinator models of Cambell et al..
 
+## Operation files
+
+There are five modules each of which focuses on a group of operations that are similar:
+1. **Model operations (model_operations.py):**
+2. **Name operations (name_operations.py):** 
+3. **Stable motif and conditionally stable motif operations (sm_csm_operations.py):**
+4. **Relationship operarions (relationship_operations.py):**
+5. **Attractor operations (attrs_operations.py):**
 
 ## Example implementation
 
-There are several python files with examples. 
+There are several python files with examples. These files demonstrate the workflow in simple use cases.
 
 
 1. File example_1.py demostrates generation of disjunctive prime form and simplified Boolean models for plant pollinator networks in text files. There are several inputs that can be provided if necessary: perturb, wp, IC, write_IC. These inputs provide the option of having initial conditions or/and perturbation in the Boolean model written in the text files. Functions disjunctive_prime_form_text_file() and simplification_text_file() write the Boolean functions in text files. 
