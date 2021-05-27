@@ -3,7 +3,7 @@
 This algorithm generates the consistent groups of stable motifs and conditionally stable motifs in plant-pollinator interaction networks of Campbell et al. model. Once those groups are identified, the code finds the ones that mutually exclude each other. These groups lead to distict new attractors. The algorithm is described in the following article:
 
 ## Data files
----
+
 There are model examples of plant-pollinator and plant-pollinator like networks in two directories:
 
 1. **plant_pollinator_models** is a directory that has several plant-pollinator models stroed in text files. The name of each text file consistes of thress number separated with an undeline. These numbers show the number of plants in that network, the number of pollinators in that network, and the network ID in the ensemble respectively.
@@ -16,7 +16,7 @@ There are model examples of plant-pollinator and plant-pollinator like networks 
 
 
 ## Example implementation
----
+
 There are several python files with examples. 
 
 
@@ -31,13 +31,13 @@ File example_4.py executes the same code for plant-pollinator like network model
 
 
 ## softwares used 
----
+
 
 
 
 
 ## Other information
----
+
 ### Notations
 The goal of this section is to provide information about different notations that are used in different steps and functions.
 The function `form_network()` from the module `BooleanDOI_processing` reads the Boolean functions from a text file and constructs the network accordingly. The network is stored in a networkx DiGraph object. This function assigns a new name in the format of *n*+ a number + *n* to each node.
