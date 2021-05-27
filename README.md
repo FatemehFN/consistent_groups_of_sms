@@ -1,5 +1,5 @@
 # consistent_groups_of_sms
- ---
+
 This algorithm generates the consistent groups of stable motifs and conditionally stable motifs in plant-pollinator interaction networks of Campbell et al. model. Once those groups are identified, the code finds the ones that mutually exclude each other. These groups lead to distict new attractors. The algorithm is described in the following article:
 
 ## Data files
