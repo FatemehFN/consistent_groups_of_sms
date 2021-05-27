@@ -4,7 +4,7 @@ This algorithm generates the consistent groups of stable motifs and conditionall
 
 
 
-I) Notations:
+<I) Notations:>
 
 
 The network that is constructed from the text file of the Boolean functions is in 'number index' notation
