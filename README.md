@@ -16,7 +16,7 @@ There are model examples of plant-pollinator and plant-pollinator like networks 
 ## Operation files
 
 There are five modules each of which focuses on a group of operations that are similar:
-1. **Model operations (model_operations.py):**
+1. **Model operations (model_operations.py):** 
 2. **Name operations (name_operations.py):** 
 3. **Stable motif and conditionally stable motif operations (sm_csm_operations.py):**
 4. **Relationship operarions (relationship_operations.py):**
