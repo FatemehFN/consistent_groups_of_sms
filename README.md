@@ -16,7 +16,7 @@ There are model examples of plant-pollinator and plant-pollinator like networks 
 ## Operation files
 
 There are five modules each of which focuses on a group of operations that are similar:
-1. **Model operations (model_operations.py):** 
+1. **Model operations (model_operations.py):** It contains the functions that generate the Boolean functions of the plant-pollinator models of Campbell et al. work from the original networks. There are two main functions: `disjunctive_prime_form_text_file` that receives the original network in DiGraph format and generates the Boolean functions in disjunctive prime form. It saves the Boolean functions in a text file. `simplification_text_file()` that receives the original network in DiGraph format and generates Boolean functions of the simplified model. Simplification works based on 1. sampling negative edges instead of keeping all of them, 2. having the same probabality of target node being active after simplification. It saves the Boolean functions in a text file.
 2. **Name operations (name_operations.py):** 
 3. **Stable motif and conditionally stable motif operations (sm_csm_operations.py):**
 4. **Relationship operarions (relationship_operations.py):**
