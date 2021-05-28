@@ -4,7 +4,7 @@ This repository is the python implementation of the attractor identification met
 
 Fatemeh Sadat Fatemi Nasrollahi, Jorge Gómez Tejeda Zañudo, Colin Campbell, and Réka Albert. The relationships among generalized positive feedback loops determine possible community outcomes in plant-pollinator interaction networks.
 
-This code first finds the stable positive feedback loops (stable motifs) and the conditionally stable positive feedback loops (conditionally stable motifs) in plant-pollinator Boolean models in the work of Campbell et al. 2011. Then it finds three relationships between such feedback loops: dependence, mutual exclusivity, and logical determination. Based on these relationships, it finds self-consistent groups of these motifs to find the distict attractors. These attractors correspond to stable community outcomes in plant-pollinator interaction networks. 
+This code first finds the stable positive feedback loops (stable motifs) and the conditionally stable positive feedback loops (conditionally stable motifs) in plant-pollinator Boolean models in the work of Campbell et al. 2011. Then it finds three relationships between such feedback loops: dependence, mutual exclusivity, and logical determination. Based on these relationships, it finds self-consistent groups of these motifs that mutually exclude each other. These groups lead to attractors of the Boolean models. In plant-pollinator interaction networks the attractors correspond to stable community outcomes. 
 
 ## Data files
 
@@ -30,7 +30,7 @@ There are several python files with examples. These files demonstrate the workfl
 2. File example_2.py demonstrates how one can use the funtion cycle_graph_virtual_node_based() to construct the cycle graph. The Boolean functions should be read from a text file using fundtion readlines() and this is the only argument to this function. It writes the cycle graph in a gml file that can be opened by YED. 
 3. Files example_3.py has an example of code execution for a plant pollinator network model. First the network of functional relationships should be constructed using the function construct_relationships_network(). Then that network should be provided for the consistent_groups_of_sms() function as an argument. This function finds the consistent groups of stable motifs and conditionally stable motifs that are mutually exclusive. It returns the number of attractors and the list of these mutually exclusive groups.         
 4. File example_4.py executes the same code for plant-pollinator like network models.
-5. 
+
 ## softwares used 
 
 
