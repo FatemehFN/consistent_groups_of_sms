@@ -26,22 +26,39 @@ There are five modules each of which focuses on a group of operations that are s
 ## Example implementation
 
 There are several python files with examples. These files demonstrate the workflow in simple use cases.
-1. File example_1.py demostrates generation of disjunctive prime form and simplified Boolean models for plant pollinator networks in text files. There are several inputs that can be provided if necessary: perturb, wp, IC, write_IC. These inputs provide the option of having initial conditions or/and perturbation in the Boolean model written in the text files. Functions disjunctive_prime_form_text_file() and simplification_text_file() write the Boolean functions in text files. 
-2. File example_2.py demonstrates how one can use the funtion cycle_graph_virtual_node_based() to construct the cycle graph. The Boolean functions should be read from a text file using fundtion readlines() and this is the only argument to this function. It writes the cycle graph in a gml file that can be opened by YED. 
-3. Files example_3.py has an example of code execution for a plant pollinator network model. First the network of functional relationships should be constructed using the function construct_relationships_network(). Then that network should be provided for the consistent_groups_of_sms() function as an argument. This function finds the consistent groups of stable motifs and conditionally stable motifs that are mutually exclusive. It returns the number of attractors and the list of these mutually exclusive groups.         
-4. File example_4.py executes the same code for plant-pollinator like network models.
+1. File example_1.py demostrates generation of disjunctive prime form and simplified Boolean models for plant pollinator networks in text files. There are several inputs that can be provided if necessary: perturb, wp, IC, write_IC. These inputs provide the option of having initial conditions or/and perturbation in the Boolean model written in the text files. Functions `disjunctive_prime_form_text_file()` and `simplification_text_file()` write the Boolean functions in text files. 
+2. File example_2.py demonstrates how one can use the funtion `cycle_graph_virtual_node_based()` to construct the cycle graph. The Boolean functions should be read from a text file using fundtion `readlines()` and this is the only argument to the function `cycle_graph_virtual_node_based()`. It writes the cycle graph in a gml file that can be opened by YED. 
+3. Files example_3.py has an example of code execution for a plant pollinator network model. First the network of functional relationships should be constructed using the function `construct_relationships_network()`. Then that network should be provided for the `consistent_groups_of_sms()` function as an argument. This function finds the consistent groups of stable motifs and conditionally stable motifs that are mutually exclusive. It returns the number of attractors and the list of these mutually exclusive groups.         
+4. File example_4.py executes the same code as in example_3.py for plant-pollinator like network models.
 
-## softwares used 
-
-
+## Main analysis
 
 
+generate expanded netowrk (fig 1)
+prime threshold model and simplified model (fig 2 and 3)
+cycle graph (fig 4)
+rlationship network (fig 7)
+fig 11 x vs n
+fig 12
+
+
+
+## softwares and codes used 
+
+### Repositories
+* We used the python package PyBoolNet developed in [Klarner et al. 2017](https://academic.oup.com/bioinformatics/article/33/5/770/2725550?login=true) that can be found [here](https://github.com/hklarner/PyBoolNet) to find stable motifs and minimal trap spaces. The latter was found using PyBoolNet as a reference.
+* For performance comparison analyses we used the java implementation of [SM analysis 2013](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004193) that can be found [here](https://github.com/jgtz/StableMotifs), and python implementation of [SM analysis 2021](https://arxiv.org/abs/2009.05526) that can be found [here](https://github.com/jcrozum/StableMotifs). 
+
+### Files
+* Files FVS.py and FVS_localsearch_10_python.py are taken from the [FVS python ripository](https://github.com/yanggangthu/FVS_python) by Gang Yang. 
+* Files BooleanDOI_DOI.py and BooleanDOI_processing.py are taken from the [Boolean DOI python ripository](https://github.com/yanggangthu/BooleanDOI) by Gang Yang. 
+* The file cool_bool_tools.py is written by Dávid Deritei.
 
 ## Other information
 
 ### Notations
 The goal of this section is to provide information about different notations that are used in different steps and functions.
-The function `form_network()` from the module `BooleanDOI_processing` reads the Boolean functions from a text file and constructs the network accordingly. The network is stored in a networkx DiGraph object. This function assigns a new name in the format of *n*+ a number + *n* to each node.
+The function `form_network()` from the module BooleanDOI_processing reads the Boolean functions from a text file and constructs the network accordingly. The network is stored in a networkx DiGraph object. This function assigns a new name in the format of *n*+ a number + *n* to each node.
 
 ```
 Example of mapping from original node names to number index notation:
