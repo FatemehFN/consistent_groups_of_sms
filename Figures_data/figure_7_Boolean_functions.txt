@@ -1,0 +1,7 @@
+#BOOLEAN RULES
+
+pl_1*=po_1
+pl_2*=po_2
+po_1*=pl_1
+po_2*=pl_1 or pl_2
+
