@@ -33,7 +33,7 @@ There are several python files with examples. These files demonstrate the workfl
 
 ## Main analysis
 
-
+These files are used to perform the analysis reported in the paper:
 generate expanded netowrk (fig 1)
 prime threshold model and simplified model (fig 2 and 3)
 cycle graph (fig 4)
@@ -43,22 +43,14 @@ fig 12
 
 
 
-## softwares and codes used 
 
-### Repositories
-* We used the python package PyBoolNet developed in [Klarner et al. 2017](https://academic.oup.com/bioinformatics/article/33/5/770/2725550?login=true) that can be found [here](https://github.com/hklarner/PyBoolNet) to find stable motifs and minimal trap spaces. The latter was found using PyBoolNet as a reference.
-* For performance comparison analyses we used the java implementation of [SM analysis 2013](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004193) that can be found [here](https://github.com/jgtz/StableMotifs), and python implementation of [SM analysis 2021](https://arxiv.org/abs/2009.05526) that can be found [here](https://github.com/jcrozum/StableMotifs). 
-
-### Files
-* Files FVS.py and FVS_localsearch_10_python.py are taken from the [FVS python ripository](https://github.com/yanggangthu/FVS_python) by Gang Yang. 
-* Files BooleanDOI_DOI.py and BooleanDOI_processing.py are taken from the [Boolean DOI python ripository](https://github.com/yanggangthu/BooleanDOI) by Gang Yang. 
-* The file cool_bool_tools.py is written by Dávid Deritei.
 
 ## Other information
 
 ### Notations
+---
 The goal of this section is to provide information about different notations that are used in different steps and functions.
-The function `form_network()` from the module BooleanDOI_processing reads the Boolean functions from a text file and constructs the network accordingly. The network is stored in a networkx DiGraph object. This function assigns a new name in the format of *n*+ a number + *n* to each node.
+The function `form_network()` from the module BooleanDOI_processing reads the Boolean functions from a text file and constructs the network accordingly. The network is stored in a networkx DiGraph object. This function  relabels the nodes and assigns a new name in the format of *n*+ a number + *n* to each node.
 
 ```
 Example of mapping from original node names to number index notation:
@@ -85,7 +77,16 @@ reverse mapping provides the mapping from the number index notation to node name
 Consistent cycles and conditionally stable motifs are stored in this format: `[{'n1': 0, 'n2': 0}, {'~n3', '~n0'}]`
 The first item is a dictionary of nodes and their states in that consistent cycle/consitionally stable motif, and the second item is a set of conditions with '~' showing the inactive state. It is stored in this format so that it would be easier to check if this set is a subset of LDOI of a set of node states. 
 
+### softwares and codes used 
+---
+#### Repositories
+* We used the python package PyBoolNet developed in [Klarner et al. 2017](https://academic.oup.com/bioinformatics/article/33/5/770/2725550?login=true) that can be found [here](https://github.com/hklarner/PyBoolNet) to find stable motifs and minimal trap spaces. The latter was found using PyBoolNet as a reference.
+* For performance comparison analyses we used the java implementation of [SM analysis 2013](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004193) that can be found [here](https://github.com/jgtz/StableMotifs), and python implementation of [SM analysis 2021](https://arxiv.org/abs/2009.05526) that can be found [here](https://github.com/jcrozum/StableMotifs). 
 
+#### Files
+* Files FVS.py and FVS_localsearch_10_python.py are taken from the [FVS python ripository](https://github.com/yanggangthu/FVS_python) by Gang Yang. 
+* Files BooleanDOI_DOI.py, BooleanDOI_processing.py and qm.py are taken from the [Boolean DOI python ripository](https://github.com/yanggangthu/BooleanDOI) by Gang Yang. 
+* The file cool_bool_tools.py is written by Dávid Deritei.
 
 
 
