@@ -9,7 +9,7 @@ file_name='figure_1_Boolean_functions'
 
 
 #read the text file of the Boolean model
-f=open('Figures/'+file_name+'.txt')
+f=open('Figures_data/'+file_name+'.txt')
 lines=f.readlines()
 f.close()
 
