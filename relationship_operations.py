@@ -308,7 +308,6 @@ def consistent_cycles(G_expanded):
 
 
 
-
 def find_DOIs(G_expanded,nodes_in_this_motif_node_number):
 
 
@@ -326,6 +325,7 @@ def find_DOIs(G_expanded,nodes_in_this_motif_node_number):
 
     DOI_of_a_m_node_numbers = (BDOI.truncated_node_of_influence_BFS(G_expanded, nodes_in_this_motif_node_number))
     return list(DOI_of_a_m_node_numbers[0])
+
 
 
 
@@ -376,6 +376,7 @@ def check_for_mutual_exclusivity_in_a_comb(comb,G_rel):
 
 
 
+
 def check_for_mutual_exclusivity(comb1, comb2, G_rel):
 
 
@@ -398,6 +399,7 @@ def check_for_mutual_exclusivity(comb1, comb2, G_rel):
                 if G_rel[comb1[i][0]][comb2[j][0]]['relationship'] == 'mutual exclusivity':
                     return True
     return False
+
 
 
 
@@ -473,6 +475,7 @@ def how_many_motifs(string,list_of_names):
 
 
 
+
 def is_subset(new_dict,support_dict,mapping):
 
 
@@ -496,6 +499,7 @@ def is_subset(new_dict,support_dict,mapping):
             return True
 
     return False
+
 
 
 
