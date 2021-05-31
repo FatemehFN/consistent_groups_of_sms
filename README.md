@@ -49,7 +49,7 @@ These files are used to perform the analysis reported in the paper:
 * Figure_13_14.py illustrates the generation of the expanded network for the Boolean functions of figure 13 and figure 14 in the appendix. The code is the same as Figure_1.py, but it runs for a different model. 
 
 ### Figures in Supplemental material
-* Figure_S_2.py generates the network of functional relationships in figure S2. 
+* Figure_S_2.py generates the network of functional relationships in figure S2 using the function `construct_relationships_network()`. 
 
 
 
