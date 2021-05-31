@@ -5,7 +5,7 @@ import sm_csm_operations as SMO
 
 
 file_name='figure_4_Boolean_functions'
-
+#file_name='figure_5_Boolean_functions'
 
 
 #read the text file of the Boolean model
