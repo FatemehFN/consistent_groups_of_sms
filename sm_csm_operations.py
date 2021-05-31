@@ -712,7 +712,7 @@ def cycle_graph_virtual_node_based(lines,write_cycle_graph=False):
         name = 'c' + str(i)
         cycles_mapping[name] = cycles[i]
 
-    print('cycle mapping')
+    print('\ncycle mapping')
     for item in cycles_mapping:
         print(item,cycles_mapping[item])
 
