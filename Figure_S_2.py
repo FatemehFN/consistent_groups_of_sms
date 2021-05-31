@@ -3,7 +3,6 @@ import relationship_operations as RO
 
 file_name='figure_5_Boolean_functions'
 
-
 #read the text file of the Boolean model
 f=open('Figures_data/'+file_name+'.txt')
 lines=f.readlines()
