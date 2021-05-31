@@ -51,8 +51,6 @@ These files are used to perform the analysis reported in the paper:
 ### Figures in Supplemental material
 * Figure_S_2.py generates the network of functional relationships in figure S2 using the function `construct_relationships_network()`. 
 
-
-
 ## Other information
 
 ### Notations
