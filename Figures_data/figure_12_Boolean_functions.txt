@@ -1,0 +1,11 @@
+#BOOLEAN RULES
+
+pl_1*=po_1 or po_2
+pl_2*=po_2
+pl_3*=po_3
+pl_4*=po_3 or po_4 or po_5
+po_1*=pl_1
+po_2*=pl_2 or pl_3
+po_3*=pl_3
+po_4*=pl_3
+po_5*=pl_1 or pl_4
