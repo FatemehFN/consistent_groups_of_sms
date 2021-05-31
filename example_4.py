@@ -4,9 +4,7 @@ import relationship_operations as RO
 import PyBoolNet
 
 
-
 file_name='model_2.txt'
-
 
 
 #read the text file of the Boolean model
@@ -22,8 +20,6 @@ f1.close()
 #number of negative edges in the model
 print('number of negative edges in the model')
 print(MO.number_of_negative_edges_text(lines))
-
-
 
 
 # number of minimal trap spaces from consistent groups of sms
