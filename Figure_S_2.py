@@ -1,6 +1,5 @@
 import relationship_operations as RO
 
-
 file_name='figure_5_Boolean_functions'
 
 
