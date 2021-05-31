@@ -1,12 +1,56 @@
+"""
+This script contains a set of functions useful for constructing the network of functional relationships between the stable motifs
+and motif groups. It also contains the functions that find the functional relationships such as mutual exclusivity and LDOI among
+the motifs and motif groups
+
+Functions:
+
+construct_relationships_network(lines,rules,write_cycle_graph): Takes the Boolean functions read from a text file and returns
+network of functional relationships in a networkx DiGraph object.
+
+consistent_cycles(G_expanded): Takes expanded network and returns the consistent cycles of it.
+
+find_DOIs(G_expanded,nodes_in_this_motif_node_number): Takes expanded network and a list of node states and returns the logical
+domain of influence of the list of node states.
+
+find_DOIs_residue(G_expanded,nodes_in_this_motif_node_number): Takes the expanded network and a list of node states and returns
+the conflicting points during the LDOI search.
+
+check_for_mutual_exclusivity_in_a_comb(comb,G_rel): Takes a list of names of motifs and motif groups and returns True if the
+list is not consistent, and False otherwise.
+
+check_for_mutual_exclusivity(comb1, comb2, G_rel): Takes two lists of motifs and motif groups and returns True if the
+the two are not consistent, and False otherwise.
+
+DOI_check(comb,G_rel): Takes a list of motifs and motif groups and returns True if it contains two motifs/ motif groups that are in the
+LDOI of each other, and False otherwise.
+
+how_many_motifs(string,list_of_names): Takes s string and the list of names of stable motifs and conditionally stable motifs and counts
+how many stable motifs and conditionally stable motifs are within the string.
+
+is_subset(new_dict,support_dict,mapping): Takes a dictionary of a newly found combination of motifs and motif group that satisfy the
+conditions of a conditionally stable motif, the dictionary of the found supports and the mapping. Returns True if the new combination
+contains any of the found supports, and False otherwise.
+
+repetition(list,mapping): Takes a list of names of stable motifs and motif groups and returns True if the list contains repition
+and False otherwise
+
+merge_mutual_DOIs(G_rel): Takes the network of functional relationships, and merges the nodes that have LDOI relationships. Returns the
+network of functional relationships after the merging.
+
+Author: Fatemeh Sadat Fatemi Nasrollahi.
+Date: May 2021
+Python Version: 3.7
+"""
+
+
 import networkx as nx
 import BooleanDOI_DOI as BDOI
 from collections import ChainMap
 import cool_bool_tools as cbt
-
 import sm_csm_operations as SMO
 import model_operations as MO
 import name_operations as NO
-
 import BooleanDOI_processing as BDOIp
 import FVS
 import copy
@@ -17,12 +61,18 @@ import copy
 def construct_relationships_network(lines,rules,write_cycle_graph):
 
 
+    """
+    constructs the cycle graph and saves it in a digraph object in which nodes are stable motifs and edges are functional
+    relationships between them
 
-    #constructs the cycle graph and saves it in a digraph object in which nodes are stable motifs and edges are functional relationships between them
-    #inputs:
-    #lines: Boolean functions read from the text file using function readlines()
-    #rules: Boolean functions read from the text file using function read()
-    #output: network of functional relationships
+    Keywork arguments:
+        lines: Boolean functions read from the text file using function readlines()
+        rules: Boolean functions read from the text file using function read()
+
+    Returns:
+        G_rel: the network of functional relationships
+    """
+
 
     G_rel=nx.DiGraph()
     len_rel_node = []
@@ -208,15 +258,19 @@ def construct_relationships_network(lines,rules,write_cycle_graph):
 
 def consistent_cycles(G_expanded):
 
-    #returns a list of consistent cycles of the expanded network in 'number index' notation
 
-    #input:
-    #G_expanded: the expanded network as Gang Yang's function Get_expanded_network() produces
-    #output:
-    #formatted_M_list: a list of consistent cycles of the expanded network in 'number index' notation
-    #example: [[{'n0': 0, 'n1': 0}, {'~n2', '~n0'}], [{'n3': 0, 'n2': 0}, {'~n2', '~n0'}]]
-    #the first member of each entity is a dictionary containing the virtual nodes inside the cycle and the second member is the composite nodes broken down.
+    """
+    returns a list of consistent cycles of the expanded network in 'number index' notation
 
+    Keywork arguments:
+        G_expanded: the expanded network as Gang Yang's function Get_expanded_network() produces
+
+    Returns:
+        formatted_M_list: a list of consistent cycles of the expanded network in 'number index' notation
+        example: [[{'n0': 0, 'n1': 0}, {'~n2', '~n0'}], [{'n3': 0, 'n2': 0}, {'~n2', '~n0'}]]
+        the first member of each entity is a dictionary containing the virtual nodes inside the cycle and the second
+        member is the composite nodes broken down.
+    """
 
 
     Ms = []
@@ -257,27 +311,37 @@ def consistent_cycles(G_expanded):
 
 def find_DOIs(G_expanded,nodes_in_this_motif_node_number):
 
-    #returns the LDOI of a list of node states in 'number index' notation such as [~n0n, ~n1n]
-    #inputs:
-    #G_expanded: the expanded network as Gang Yang's function Get_expanded_network() produces
-    #nodes_in_this_motif_node_number: a list of node states in 'number index' notation such as [~n0n, ~n1n]
-    #output: the LDOI of the list of node states given in nodes_in_this_motif_node_number in ' number index' notation. For example [~n2n, ~n3n, n4n, ~n3n_n4n]
+
+    """
+    returns the LDOI of a list of node states in 'number index' notation such as [~n0n, ~n1n]
+
+    Keyword arguments:
+        G_expanded: the expanded network as Gang Yang's function Get_expanded_network() produces
+        nodes_in_this_motif_node_number: a list of node states in 'number index' notation such as [~n0n, ~n1n]
+
+    Returns:
+        list(DOI_of_a_m_node_numbers[0]):the LDOI of the list of node states given in nodes_in_this_motif_node_number in ' number index' notation. For example [~n2n, ~n3n, n4n, ~n3n_n4n]
+    """
+
 
     DOI_of_a_m_node_numbers = (BDOI.truncated_node_of_influence_BFS(G_expanded, nodes_in_this_motif_node_number))
     return list(DOI_of_a_m_node_numbers[0])
 
 
 
-
-
 def find_DOIs_residue(G_expanded,nodes_in_this_motif_node_number):
 
-    # returns the conflicting node states to the source during the search for LDOI of a list of node states
-    # inputs:
-    # G_expanded: the expanded network as Gang Yang's function Get_expanded_network() produces
-    # nodes_in_this_motif_node_number: a list of node states in 'number index' notation such as [~n0n, ~n1n]
-    # output: a list of conflicting node states found during LDOI search. For example [n0n]
 
+    """
+    returns the conflicting node states to the source during the search for LDOI of a list of node states
+
+    Keywork arguments:
+        G_expanded: the expanded network as Gang Yang's function Get_expanded_network() produces
+        nodes_in_this_motif_node_number: a list of node states in 'number index' notation such as [~n0n, ~n1n]
+
+    Returns:
+        list(DOI_of_a_m_node_numbers[2]):a list of conflicting node states found during LDOI search. For example [n0n]
+    """
 
 
     DOI_of_a_m_node_numbers = (BDOI.truncated_node_of_influence_BFS(G_expanded, nodes_in_this_motif_node_number))
@@ -289,14 +353,17 @@ def find_DOIs_residue(G_expanded,nodes_in_this_motif_node_number):
 def check_for_mutual_exclusivity_in_a_comb(comb,G_rel):
 
 
-    #returns a boolean value showing if a combination of stable motifs and motif groups is self-consistent or not
-    #to find this, it uses the info stored in G_rel edges
+    """
+    returns a boolean value showing if a combination of stable motifs and motif groups is self-consistent or not
+    to find this, it uses the info stored in G_rel edges
 
-    #inputs:
-    #comb: a list of stable motifs and/or motif groups. just the names in strings without data=True
-    #G_rel: network of functional relationships between the stable motifs and motif groups in the form of a digraph
+    Keyword arguments:
+        comb: a list of stable motifs and/or motif groups. Just the names in strings without data=True
+        G_rel: network of functional relationships between the stable motifs and motif groups in the form of a digraph
 
-    #outputs: True if the list contains two motifs/motif groups that are not consistent, and False otherwise
+    Returns:
+        True if the list contains two motifs/motif groups that are not consistent, and False otherwise
+    """
 
 
     for i in range (len(comb)):
@@ -310,14 +377,20 @@ def check_for_mutual_exclusivity_in_a_comb(comb,G_rel):
 
 
 def check_for_mutual_exclusivity(comb1, comb2, G_rel):
-    # returns a boolean value showing if two combinations of stable motifs and motif groups are consistent or not
-    # to find this, it uses the info stored in G_rel edges
 
-    # inputs:
-    # comb1, comb2: two lists of stable motifs and/or motif groups with data=True
-    # G_rel: network of functional relationships between the stable motifs and motif groups in the form of a digraph
 
-    # outputs: True if the two lists contains two motifs/motif groups that are not consistent, and False otherwise
+    """
+    returns a boolean value showing if two combinations of stable motifs and motif groups are consistent or not
+    to find this, it uses the info stored in G_rel edges
+
+    Keyword arguments:
+        comb1, comb2: two lists of stable motifs and/or motif groups with data=True
+        G_rel: network of functional relationships between the stable motifs and motif groups in the form of a digraph
+
+    Returns:
+        True if the two lists contains two motifs/motif groups that are not consistent, and False otherwise
+    """
+
 
     for i in range(len(comb1)):
         for j in range(len(comb2)):
@@ -331,14 +404,17 @@ def check_for_mutual_exclusivity(comb1, comb2, G_rel):
 def DOI_check(comb,G_rel):
 
 
-    # returns a boolean value showing if a combination of stable motifs and motif groups has two items that are in LDOI of each other
-    # to find this, it uses the info stored in G_rel edges
+    """
+    returns a boolean value showing if a combination of stable motifs and motif groups has two items that are in LDOI of each other
+    to find this, it uses the info stored in G_rel edges
 
-    # inputs:
-    # comb: a list of stable motifs and/or motif groups
-    # G_rel: network of functional relationships between the stable motifs and motif groups in the form of a digraph
+    Keyword arguments:
+        comb: a list of stable motifs and/or motif groups
+        G_rel: network of functional relationships between the stable motifs and motif groups in the form of a digraph
 
-    # outputs: True if the list contains two motifs/motif groups that are in LDOI of each other , and False otherwise
+    Returns:
+        True if the list contains two motifs/motif groups that are in LDOI of each other , and False otherwise
+    """
 
 
     for i in range (len(comb)):
@@ -358,13 +434,17 @@ def DOI_check(comb,G_rel):
 
 def how_many_motifs(string,list_of_names):
 
-    #returns how many stable motifs and conditionally stable motifs are included within one string
 
-    #inputs:
-    #string: a string of nodes with their states in pl-po notation such as 'pl_0p=0;po_0p=0;pl_1p=0;po_1p=0;'
-    #list_of_names: a list of strings, each of which is a stable motif or a conditionally stable motif such as ['pl_0p=0;po_0p=0;', 'pl_1p=0;po_1p=0;']
-    #output:
-    # a number showing how many motifs are included in a string. In the above example the function returns 2.
+    """
+    returns how many stable motifs and conditionally stable motifs are included within one string
+
+    Keyword arguments:
+        string: a string of nodes with their states in pl-po notation such as 'pl_0p=0;po_0p=0;pl_1p=0;po_1p=0;'
+        list_of_names: a list of strings, each of which is a stable motif or a conditionally stable motif such as ['pl_0p=0;po_0p=0;', 'pl_1p=0;po_1p=0;']
+
+    Returns:
+        count: the number showing how many motifs are included in a string. In the above example the function returns 2.
+    """
 
 
     count=0
@@ -395,15 +475,20 @@ def how_many_motifs(string,list_of_names):
 
 def is_subset(new_dict,support_dict,mapping):
 
-    #returns a boolean value showing if any member of the list of previously found supports of a conditionally stable motif is a subset of a newly found one
-    #for example if the combination of motifs 1, 2 is a support, then the combination of motifs 1, 2, and 3 is not a support.
 
-    #inputs:
-    #new_dict: the new combination that supports the conditionally stable motif in the form of a dictionary
-    #support_dict: a list of previously found supports of a conditionally stable motif
-    #mapping: a dictionary mapping from pl-po notation to 'number index' notation
+    """
+    returns a boolean value showing if any member of the list of previously found supports of a conditionally stable motif is
+    a subset of a newly found one
+    for example if the combination of motifs 1, 2 is a support, then the combination of motifs 1, 2, and 3 is not a support.
 
-    #output: True if the newly found combination contains any of the previously found ones, and False otherwise
+    Keyword arguments:
+        new_dict: the new combination that supports the conditionally stable motif in the form of a dictionary
+        support_dict: a list of previously found supports of a conditionally stable motif
+        mapping: a dictionary mapping from pl-po notation to 'number index' notation
+
+    Returns:
+        True if the newly found combination contains any of the previously found ones, and False otherwise
+    """
 
 
     for s in support_dict:
@@ -417,15 +502,16 @@ def is_subset(new_dict,support_dict,mapping):
 def repetition(list,mapping):
 
 
+    """
+    returns a boolean value showing if there is repition among members of a list of motifs/motif groups. repition is allowed between motif groups
+    because two conditionally stable motifs could have the same supports, but it's not allowed between a motif group and a stable motif.
 
-    #returns a boolean value showing if there is repition among members of a list of motifs/motif groups. repition is allowed between motif groups
-    # because two conditionally stable motifs could have the same supports, but it's not allowed between a motif group and a stable motif.
-
-    #inputs:
-    #list: a list of motifs/motif groups such as ['pl_0p=0;po_0p=0;', 'pl_1p=0;po_1p=0;']
-    #mapping: a dictionary mapping from pl-po notation to 'number index' notation
-    #output: True if the list contains two motifs/motif groups that are repetitive , and False otherwise
-
+    Keyword arguments:
+        list: a list of motifs/motif groups such as ['pl_0p=0;po_0p=0;', 'pl_1p=0;po_1p=0;']
+        mapping: a dictionary mapping from pl-po notation to 'number index' notation
+    Returns:
+        True if the list contains two motifs/motif groups that are repetitive , and False otherwise
+    """
 
 
     for item1 in list:
@@ -441,10 +527,17 @@ def repetition(list,mapping):
 
 def merge_mutual_DOIs(G_rel):
 
-    #receives network of functional relationships and merges the nodes that have mutual LDOIs into one of them keeping the edges of those that are merged
-    # going to and coming from the kept one
-    #input: network of functional relationships G_rel in the form of a digraph object
-    #output: network of functional relationships G_rel with nodes that have mutual LDOIs merged into one
+
+    """
+    receives network of functional relationships and merges the nodes that have LDOI relationships into one of them keeping the edges
+    of those that are merged going to and coming from the kept one
+
+    Keyword arguments:
+        G_rel: network of functional relationships in the form of a networkx digraph object
+
+    Returns:
+        G_rel: network of functional relationships G_rel with nodes that have LDOI relationships merged into one
+    """
 
 
     def mutual_DOI_detection(G_rel):
