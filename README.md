@@ -48,7 +48,7 @@ These files are used to perform the analysis reported in the paper:
 * Figure_12.py illustrates the generation of expanded network and cycle graph for the Boolean functions of the models in figure 12. The code is the same as Figure_4_5.py, but it runs for a different model. 
 * Figure_13_14.py illustrates the generation of the expanded network for the Boolean functions of figure 13 and figure 14 in the appendix. The code is the same as Figure_1.py, but it runs for a different model. 
 
-### Figures in Supplemental material
+### Figures in supplemental material
 * Figure_S_2.py generates the network of functional relationships in figure S2 using the function `construct_relationships_network()`. 
 
 ## Other information
