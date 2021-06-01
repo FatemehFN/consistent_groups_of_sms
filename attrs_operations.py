@@ -1,3 +1,19 @@
+"""
+This script contains a set of functions useful for constructing the consistent combinations of stable motifs and motif groups
+
+Functions:
+
+consistent_groups_of_sms(G_rel, list_of_names,lines): Takes the network of functional relationships, list of names of all stable motifs
+and conditionally stable motifs, and the Boolean functions read with function readlines(), and returns the consistent combinations that
+are mutually exclusive (and hence lead to attractors) and the number of attractors.
+
+is_new_attractor(SCcom,attrs,G_rel): Takes a group of stable motifs and motif groups, the previously found attractors, and the network
+of functional relationships, and returns True if the group mutually excludes all previously found attractors, and False otherwise.
+
+Author: Fatemeh Sadat Fatemi Nasrollahi.
+Date: May 2021
+Python Version: 3.7
+"""
 
 
 import itertools
@@ -10,11 +26,19 @@ import FVS
 
 def is_new_attractor(SCcom,attrs,G_rel):
 
-    #returns True if the consistent combination of motifs/motif groups excludes all previously found attractor, and False otherwise.
-    #inputs:
-    #SCcom: the combination of motifs/motif groups
-    #attrs: the list of attractors
-    #G_rel: network of functional relationships between the stable motifs and motif groups in the form of a digraph
+
+    """
+    Returns True if the consistent combination of motifs/motif groups excludes all previously found attractor, and False otherwise.
+
+    Keyword arguments:
+        SCcom -- the combination of motifs/motif groups
+        attrs -- the list of attractors
+        G_rel -- network of functional relationships between the stable motifs and motif groups in the form of a digraph
+
+    Returns:
+        True if the newly found combination of motifs/motif groups mutually excludes all previously found attractors, and False otherwise
+    """
+
 
     bool_check = []
     for A in attrs:
@@ -26,29 +50,31 @@ def is_new_attractor(SCcom,attrs,G_rel):
 
 
 
-
 def consistent_groups_of_sms(G_rel, list_of_names,lines):
 
-    #calculates the number of q-attrs/minimal trap spaces based on the relationships between the motifs/motif groups
-    #inputs:
-    # G_rel: network of functional relationships between the motifs/motif groups. In this network nodes are motifs and motif groups and edges are the functional
-    # relationships between the motifs/motif groups
-    # FVS_size: size of the feedback vertex set
-    # list_of_names: The list of the names of all stable motifs and conditionally stable motifs. This is for counting purposes.
 
-    #output: number of consistent groups of motifs/motif groups, which is the same as number of q-attrs/minimal trap spaces
+    """
+    Calculates the number of q-attrs/minimal trap spaces based on the relationships between the motifs/motif groups
 
+    Keyword arguments:
+        G_rel -- network of functional relationships between the motifs/motif groups. In this network nodes are motifs
+        and motif groups and edges are the functional relationships between the motifs/motif groups
+        list_of_names: The list of the names of all stable motifs and conditionally stable motifs. This is for counting purposes.
 
-    #Extras:
-    #alpha: the number of unstabilized nodes after substituting the specific motif/motif group
-    #G_rel nodes format: [[{pl_1p:0, po_1p:0},{'number of sms':1, 'alpha': 14}],[{pl_2p:0, po_2p:0},{'number of sms':1, 'alpha': 0}],...]
-    #G_rel edges format: [('pl_1p=0;po_1p=0;', 'pl_2p=0;po_2p=0;', {'relationship': 'DOI'}),...]
+    Returns:
+        attrs -- maximal consistent combinations of stable motifs/motif groups that mutually exclude each other
+        len_attrs:number of consistent groups of motifs/motif groups, which is the same as number of q-attrs/minimal trap spaces
+
+    Useful information:
+        alpha -- the number of unstabilized nodes after substituting the specific motif/motif group
+        G_rel nodes format -- [[{pl_1p:0, po_1p:0},{'number of sms':1, 'alpha': 14}],[{pl_2p:0, po_2p:0},{'number of sms':1, 'alpha': 0}],...]
+        G_rel edges format -- [('pl_1p=0;po_1p=0;', 'pl_2p=0;po_2p=0;', {'relationship': 'DOI'}),...]
+    """
 
 
     G_rel = RO.merge_mutual_DOIs(G_rel)
     print('motifs/ motif groups in network of functional relationships')
     print(G_rel.nodes(data=True))
-
 
 
     Gread, readnodes = BDOIp.form_network(lines, sorted_nodename=False)
@@ -106,7 +132,6 @@ def consistent_groups_of_sms(G_rel, list_of_names,lines):
     for SCcom in self_consistent_combs:
         if is_new_attractor(SCcom,attrs,G_rel)==True:
             attrs.append(SCcom)
-
 
 
     # To add the alpha non zeros that cannot be combined with anything else (oscillations)
