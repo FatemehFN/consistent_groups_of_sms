@@ -562,26 +562,5 @@ def merge_mutual_DOIs(G_rel):
         else:
             G_rel=nx.contracted_nodes(G_rel,items[0][0],items[1][0])
 
-    '''
-    
-    def one_way_DOI_detection(G_rel):
-        for node1 in G_rel.nodes(data=True):
-            for node2 in G_rel.nodes(data=True):
-                if node1[0]!=node2[0]:
-                    if G_rel.has_edge(node1[0], node2[0]):
-                        if G_rel[node1[0]][node2[0]]['relationship'] == 'DOI':
-                            return [True,[node1,node2]]
-        return [False,[]]
-    
-    
-    
-    while True:
-        [bool_mutual_DOI, items] = one_way_DOI_detection(G_rel)
-        if bool_mutual_DOI==False:
-            break
-        else:
-            G_rel=nx.contracted_nodes(G_rel,items[0][0],items[1][0])'''
-
-
 
     return G_rel
