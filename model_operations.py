@@ -1,21 +1,43 @@
+"""
+This script contains a set of functions useful for generating the disjunctive prime form and simplified Boolean model of
+the plant-pollinator threshold functions.
+
+Functions:
+
+disjunctive_prime_form_text_file(G, network_number, plant, pollinator, IC_number=0,
+                                     IC=[], write_IC=False, perturb=False, wp=0,request_for_p_n_edges=False): Takes the the original network
+in the form of a DiGraph and writes the Boolean functions in disjunctive prime form in a text file.
+
+find_false_nodes(G): Takes the original network in the form of a DiGraph and returns the list of the species (nodes) that cannot
+establish under any circumstances and are extinct in all attractors.
+
+simplification_text_file(G,network_number,plant,pollinator,IC=[],IC_number=0,
+                             write_IC=False,more=False,less=True,perturb=False,wp=0): Takes the the original network
+in the form of a DiGraph and writes the simplified Boolean functions in a text file.
+
+number_of_false_nodes(lines): Takes the Boolean functions in 'lines' and returns the number of nodes that their regulatory function is False.
+
+write_g_expanded(G_expanded,model_name): Takes the expanded network and writes it in a gml file that can be opened via YED.
+
+number_of_unstabilized_nodes(nodes_to_find_downstream_of,rules,number_of_nodes): Takes a dictionary of nodes and their states, Boolean rules,
+and number of nodes in the network and returns the number of unstabilized nodes after substituting the node states in the dictionary.
+
+number_of_negative_edges_text(lines): Takes the Boolean functions read with function readlines() and returns the number of negative edges
+in the model.
+
+Author: Fatemeh Sadat Fatemi Nasrollahi.
+Date: May 2021
+Python Version: 3.7
+"""
+
 
 import PyBoolNet
 import networkx as nx
-
 import pandas as pd
 import math
 import numpy as np
 import itertools
-from itertools import permutations
 import random
-
-
-
-
-
-def mapping(x):
-    return x + 'p'
-
 
 
 
@@ -23,22 +45,33 @@ def mapping(x):
 def disjunctive_prime_form_text_file(G, network_number, plant, pollinator, IC_number=0,
                                      IC=[], write_IC=False, perturb=False, wp=0,request_for_p_n_edges=False):
 
-    #writes the Boolean functions of a pl-po threshold model in disjunctive prime form in a text file
-    #if request_for_p_n_edges==True it returns the number of remaining positive and negative edges after converting to disjunctive
-    #prime form, otherwise doesn't return anything.
-    #this is currently hard coded for positive weight of 4 and negative weight of -1 for the Campbell et al. model.
 
-    #inputs:
-    #G: the original digraph including all prositive and negative edges. This object is taken from Colin's ensembles
-    #network_number: the index of a network within each batch. This index starts at 0 and goes to 999 for each batch.
-    #plant: the number of plants in the network
-    #pollinator: the number of pollinators in the network
-    #write_IC: if True, the function writes initial conditions at the beginning of the text file
-    #IC: initial conditions in the form of a list of 0s and 1s showing what the state of each species is at t=0. This is only implemented if one
-    #wants to try synchronous update or study perturbations.
-    #perturb: if True, the perturbed version of the Boolean functions are written within the text file
-    #wp: weight of the perturbation. for example if set to 0.3 in a network of 100 nodes, 30 nodes will be perturbed to their active states.
+    """
+    writes the Boolean functions of a pl-po threshold model in disjunctive prime form in a text file
+    if request_for_p_n_edges==True it returns the number of remaining positive and negative edges after converting to disjunctive
+    prime form, otherwise doesn't return anything.
+    this is currently hard coded for positive weight of 4 and negative weight of -1 for the Campbell et al. model.
 
+    Keyword arguments:
+        G -- the original network in a digraph object including all positive and negative edges. This object is taken from Colin
+        Campbell's ensembles
+        network_number -- the index of a network within each batch. This index starts at 0 and goes to 999 for each batch.
+        plant -- the number of plants in the network
+        pollinator -- the number of pollinators in the network
+        write_IC -- if True, the function writes initial conditions at the beginning of the text file
+        IC -- initial conditions in the form of a list of 0s and 1s showing what the state of each species is at t=0. This is only
+        implemented if one wants to try synchronous update or study perturbations.
+        perturb -- if True, the perturbed version of the Boolean functions are written within the text file
+        wp -- weight of the perturbation. for example if set to 0.3 in a network of 100 nodes, 30 nodes will be perturbed to their active states.
+
+    Returns:
+        if request_for_p_n_edges==True, it returns positive_edges_in_this_net, negative_edges_in_this_net which are the number of positive
+        and negative edges after conversion respectively.
+        otherwise it does not return anything and just generates a text file containing Boolean functions.
+    """
+
+    def mapping(x):
+        return x + 'p'
 
     G = nx.relabel_nodes(G, mapping)
     nodes = list(G.nodes(data=True))
@@ -54,14 +87,6 @@ def disjunctive_prime_form_text_file(G, network_number, plant, pollinator, IC_nu
     if write_IC==True:
         address+='_IC'+str(IC_number)
     f = open(address+'.txt', 'w')
-
-
-
-
-
-
-
-
 
 
 
@@ -108,9 +133,6 @@ def disjunctive_prime_form_text_file(G, network_number, plant, pollinator, IC_nu
         positive_edges_in_this_net += len(positive_regulators)
         if len(negative_regulators)>3 and len(positive_regulators)!=0:
             negative_edges_in_this_net+=len(negative_regulators)
-
-
-
 
 
         name_of_positive_reg = [item[0] for item in positive_regulators]
@@ -185,15 +207,20 @@ def disjunctive_prime_form_text_file(G, network_number, plant, pollinator, IC_nu
 
 
 
-
 def find_false_nodes(G):
 
-    #finds the species that cannot establish under any circumstances and become extinct in all attractors. Figure 2 on the paper describes these nodes.
-    #inputs:
-    #G: the original digraph including all prositive and negative edges. This object is taken from Colin's ensembles
-    #output:
-    #false_nodes: the species that cannot establish in a list
 
+    """
+    finds and returns the list of species that cannot establish under any circumstances and become extinct in all attractors.
+    Figure 2 in the paper describes these nodes. These species either do not have any positive regulators or all their
+    positive regulators are from the group of species that do not have positive regulators. As a result none of them can establish.
+
+    Keyword arguments:
+        G -- the original digraph including all positive and negative edges. This object is taken from Colin Campbell's ensembles
+
+    Returns:
+        false_nodes -- the list of species (nodes) that cannot establish
+    """
 
 
     nodes = list(G.nodes(data=True))
@@ -251,29 +278,32 @@ def find_false_nodes(G):
 
 
 
-
 def simplification_text_file(G,network_number,plant,pollinator,IC=[],IC_number=0,
                              write_IC=False,more=False,less=True,perturb=False,wp=0):
 
 
-    #simplifies and writes the Boolean functions of a pl-po threshold model in disjunctive prime form in a text file. simplification method is
-    # explained in the paper. It samples negative edges instead of keeping all of them and preserves the probability of being active in the traget node.
-    #both directions of the inequality discussed in the paper are implemented in this function. 'less' stands for 'keeping less negative edges' in the
-    # final Boolean function when p_b>=p_t (the case we decided to go with), and 'more' stands for 'keeping more negative edges' in the
-    # final Boolean function when p_b<=p_t
-    #this is currently hard coded for positive weight of 4 and negative weight of -1 for the Campbell et al. model.
+    """
+    simplifies and writes the Boolean functions of a plant pollinator threshold functions in disjunctive prime form in a text file.
+    simplification method is explained in the paper.
+    It samples negative edges instead of keeping all of them and preserves the probability of being active for the target node.
+    both directions of the inequality discussed in the paper are implemented in this function. 'less' stands for 'keeping less
+    negative edges' in the final Boolean function when p_b>=p_t (the case we decided to go with),
+    and 'more' stands for 'keeping more negative edges' in the final Boolean function when p_b<=p_t
+    this is currently hard coded for positive weight of 4 and negative weight of -1 for the Campbell et al. model.
 
 
-    #inputs:
-    #G: the original digraph including all prositive and negative edges. This object is taken from Colin's ensembles
-    #network_number: the index of a network within each batch. This index starts at 0 and goes to 999 for each batch.
-    #plant: the number of plants in the network
-    #pollinator: the number of pollinators in the network
-    #write_IC: if True, the function writes initial conditions at the beginning of the text file
-    #IC: initial conditions in the form of a list of 0s and 1s showing what the state of each species is at t=0.
-    #This is only implemented if one wants to try synchronous update or perturbations.
-    #perturb: if True, the perturbed version of the Boolean functions are written within the text file
-    #wp: weight of the perturbation. for example if set to 0.3 in a network of 100 nodes, 30 nodes will be perturbed to their active states.
+    Keywork arguments:
+        G -- the original digraph including all positive and negative edges. This object is taken from Colin's ensembles
+        network_number: the index of a network within each batch. This index starts at 0 and goes to 999 for each batch.
+        plant -- the number of plants in the network
+        pollinator -- the number of pollinators in the network
+        write_IC (arbitrary) -- if True, the function writes initial conditions at the beginning of the text file
+        IC (arbitrary) -- initial conditions in the form of a list of 0s and 1s showing what the state of each species is at t=0.
+        This is only implemented if one wants to try synchronous update or perturbations.
+        perturb (arbitrary) -- if True, the perturbed version of the Boolean functions are written within the text file
+        wp (arbitrary) -- weight of the perturbation. for example if set to 0.3 in a network of 100 nodes, 30 nodes will be perturbed
+        to their active states.
+    """
 
 
     def mapping(x):
@@ -521,11 +551,19 @@ def simplification_text_file(G,network_number,plant,pollinator,IC=[],IC_number=0
 
 
 
+
 def number_of_false_nodes(lines):
 
-    #counts the number of nodes that are initially False
-    #input: Boolean rules in the format of lines
-    #output: returns the number of False nodes in the original Boolean model
+
+    """
+    returns the number of nodes that are False in the text file
+
+    Keyword arguments:
+        lines -- Boolean rules read from the text file using function readlines()
+
+    Returns:
+        total_count -- the number of False nodes in the text file read with function readlines()
+    """
 
 
     total_count = 0
@@ -539,10 +577,17 @@ def number_of_false_nodes(lines):
 
 def write_g_expanded(G_expanded,model_name):
 
-    #writes expanded network in a gml file that can be opened with yED.
-    #inputs:
-    #the expanded network as Gang Yang's function Get_expanded_network() produces
-    #model_name: name of the model in a string
+
+    """
+    writes expanded network in a gml file that can be opened with yED.
+
+    Keyword arguments:
+        G_expanded -- the expanded network as Gang Yang's function Get_expanded_network() produces
+        model_name -- name of the model in a string to be saved in the name of the generated gml file
+
+    Returns:
+        writes the expanded network in a gml file
+    """
 
 
     nx.write_gml(G_expanded, 'expanded_network_' + model_name+ '.gml')
@@ -550,17 +595,20 @@ def write_g_expanded(G_expanded,model_name):
 
 
 
-def number_of_unstabilized_nodes(nodes_to_find_downstream_of,rules,number_of_nodes): #ye argumente akhar dashte watch out
+def number_of_unstabilized_nodes(nodes_to_find_downstream_of,rules,number_of_nodes):
 
 
-    #counts the number of unstabilized nodes after stabilizing a specific motif/motif group
-    #inputs:
-    # nodes_to_find_downstream_of: the motif dictionary in pl-po notation {pl_1p:0, po_1p:0}
-    # rules: Boolean rules
-    # number_of_nodes: total number of nodes in the network
-    #output: the number of unstabilized nodes after stabilizing a specific motif/motif group
+    """
+    Returns the number of unstabilized nodes after stabilizing a specific motif/motif group.
 
+    Keyword arguments:
+        nodes_to_find_downstream_of -- the motif dictionary in pl-po notation, e.g., {pl_1p:0, po_1p:0}
+        rules -- Boolean rules
+        number_of_nodes -- total number of nodes in the network
 
+    Returns:
+        (number_of_nodes - len(constants)) -- the number of unstabilized nodes after stabilizing a specific motif/motif group
+    """
 
 
     node_substitutions = {}
@@ -584,9 +632,18 @@ def number_of_unstabilized_nodes(nodes_to_find_downstream_of,rules,number_of_nod
 
 def number_of_negative_edges_text(lines):
 
-    #returns the number of negative edges in the Boolean model
-    #input: lines which is the Boolean model text file read with the function readlines()
-    #output: the number of negative edges
+
+    """
+    Returns the number of negative edges in the Boolean model
+
+    Keyword arguments:
+        lines -- Boolean model text file read with the function readlines()
+
+    Returns:
+        total_count -- the number of negative edges
+    """
+
+
     total_count=0
     for i in range (len(lines)):
         count = lines[i].count('not')
