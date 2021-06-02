@@ -29,7 +29,7 @@ There are five modules each of which focuses on a group of operations that are s
 ## Example implementation
 
 There are several python files with examples. These files demonstrate the workflow in simple use cases.
-1. File example_1.py demostrates generation of disjunctive prime form and simplified Boolean models for plant pollinator networks in text files. There are several inputs that can be provided if necessary: perturb, wp, IC, write_IC. These inputs provide the option of having initial conditions or/and perturbation in the Boolean model written in the text files. Functions `disjunctive_prime_form_text_file()` and `simplification_text_file()` write the Boolean functions in text files. 
+1. File example_1.py demostrates generation of disjunctive prime form and simplified Boolean models for plant pollinator networks in text files. There are several inputs that can be provided if necessary: perturb, wp, IC, and write_IC. These inputs provide the option of having initial conditions or/and perturbation in the Boolean model written in the text files. Functions `disjunctive_prime_form_text_file()` and `simplification_text_file()` write the Boolean functions in text files. 
 2. File example_2.py demonstrates how one can use the funtion `cycle_graph_virtual_node_based()` to construct the cycle graph. The Boolean functions should be read from a text file using fundtion `readlines()` and this is the only argument to the function `cycle_graph_virtual_node_based()`. It writes the cycle graph in a gml file that can be opened by YED. 
 3. Files example_3.py has an example of code execution for a plant pollinator network model. First the network of functional relationships should be constructed using the function `construct_relationships_network()`. Then that network should be provided for the `consistent_groups_of_sms()` function as an argument. This function finds the consistent groups of stable motifs and conditionally stable motifs that are mutually exclusive. It returns the number of attractors and the list of these mutually exclusive groups.         
 4. File example_4.py executes the same code as in example_3.py for plant-pollinator like network models.
@@ -50,6 +50,14 @@ These files are used to perform the analysis reported in the paper:
 
 ### Figures in supplemental material
 * Figure_S_2.py generates the network of functional relationships in figure S2 using the function `construct_relationships_network()`. 
+
+
+## Requirements
+
+* Networkx 1.11
+* PyBoolNet 2.3+
+* NumPy 1.20+
+* Pandas 1.1.5+
 
 ## Other information
 
