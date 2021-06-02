@@ -51,6 +51,14 @@ These files are used to perform the analysis reported in the paper:
 ### Figures in supplemental material
 * Figure_S_2.py generates the network of functional relationships in figure S2 using the function `construct_relationships_network()`. 
 
+
+## Requirements
+
+* Networkx 1.11
+* PyBoolNet 2.3+
+* NumPy 1.20+
+* Pandas 1.1.5+
+
 ## Other information
 
 ### Notations
