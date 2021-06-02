@@ -649,6 +649,3 @@ def number_of_negative_edges_text(lines):
         count = lines[i].count('not')
         total_count=total_count+count
     return total_count
-
-
-
