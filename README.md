@@ -61,6 +61,8 @@ These files are used to perform the analysis reported in the paper:
 * PyBoolNet 2.3+
 * NumPy 1.20+
 * Pandas 1.1.5+
+* Sympy 1.5.1+
+* StableMotifs
 
 ## Other information
 
