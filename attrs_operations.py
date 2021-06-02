@@ -64,12 +64,12 @@ def consistent_groups_of_sms(G_rel, list_of_names,lines):
     Returns:
         attrs -- maximal consistent combinations of stable motifs/motif groups that mutually exclude each other
         len_attrs:number of consistent groups of motifs/motif groups, which is the same as number of q-attrs/minimal trap spaces
-
-    Useful information:
-        alpha -- the number of unstabilized nodes after substituting the specific motif/motif group
-        G_rel nodes format -- [[{pl_1p:0, po_1p:0},{'number of sms':1, 'alpha': 14}],[{pl_2p:0, po_2p:0},{'number of sms':1, 'alpha': 0}],...]
-        G_rel edges format -- [('pl_1p=0;po_1p=0;', 'pl_2p=0;po_2p=0;', {'relationship': 'DOI'}),...]
     """
+
+
+    #alpha -- the number of unstabilized nodes after substituting the specific motif/motif group
+    #G_rel nodes format -- [[{pl_1p:0, po_1p:0},{'number of sms':1, 'alpha': 14}],[{pl_2p:0, po_2p:0},{'number of sms':1, 'alpha': 0}],...]
+    #G_rel edges format -- [('pl_1p=0;po_1p=0;', 'pl_2p=0;po_2p=0;', {'relationship': 'DOI'}),...]
 
 
     G_rel = RO.merge_mutual_DOIs(G_rel)
