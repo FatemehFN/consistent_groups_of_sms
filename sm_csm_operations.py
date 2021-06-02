@@ -1,3 +1,35 @@
+"""
+This script contains a set of functions useful for finding the stable motifs, conditionally stable motifs, and the support of
+conditonally stable motifs.
+
+Functions:
+
+map(cycles): Takes the consistent cycles of the expanded network and assigns a key 'c' + number to each of them and returns the map.
+
+stable_motifs(r): Takes the Boolean functions of a model stored in r and returns the stable motifs.
+
+order(csms,mapping,bridge): Takes the conditionally stable motifs (CSMs) and returns the ordered list of CSMs.
+
+self_consistence_check(comp,cycles_mapping,mapping): Takes an SCC of the cycle graph and returns True if it is consistent,
+and False otherwise.
+
+csm_finder_positive_edges(cycles, mapping,write_cycle_graph): Takes the consistent cycles of the expanded network and returns the
+ordered list of conditionally stable motifs for a negative edge free network.
+
+csm_finder_general_function(cycles, mapping, G_expanded,write_cycle_graph): Takes the consistent cycles of the expanded network and returns
+the ordered list of conditionally stable motifs for a general network.
+
+find_supports(csm, mapping, G_expanded, G_rel,FVS_size,list_of_names, number_of_neg_edges): Takes a conditionally stable motif and returns
+a list of its supports.
+
+cycle_graph_virtual_node_based(lines,write_cycle_graph=False): Takes the Boolean functions, and constructs and writes the cycle graph based
+on virtual nodes of the expanded network. 
+
+Author: Fatemeh Sadat Fatemi Nasrollahi.
+Date: May 2021
+Python Version: 3.7
+"""
+
 
 import PyBoolNet
 import name_operations as NO
@@ -11,11 +43,17 @@ import BooleanDOI_processing as BDOIp
 def map(cycles):
 
 
-    #generates the cycles_mapping that is a dictionary assigning a 'c'+number to each consistent cycle of the expanded network
-    #example: {'c0': [{'n2': 0, 'n3': 0}, {'~n2', '~n0'}], 'c1': [{'n2': 0, 'n1': 0, 'n0': 0, 'n3': 0}, {'~n2', '~n0'}]}
-    #input:
-    #consistent cycles of the expanded network as the function consistent_cycles() of relationship_operations produces.
-    #output: a map from c1,c2,... to the consistent cycles
+    """
+    Generates the cycles_mapping that is a dictionary assigning a 'c'+number to each consistent cycle of the expanded network.
+    example: {'c0': [{'n2': 0, 'n3': 0}, {'~n2', '~n0'}], 'c1': [{'n2': 0, 'n1': 0, 'n0': 0, 'n3': 0}, {'~n2', '~n0'}]}
+
+    Keyword argument:
+        cycles -- consistent cycles of the expanded network as the function consistent_cycles() of relationship_operations produces.
+
+    Returns:
+        cycles_mapping -- a map from c1,c2,... to the consistent cycles
+    """
+
 
     cycles_mapping = {}
     for i in range(len(cycles)):
@@ -26,14 +64,22 @@ def map(cycles):
 
 
 
+
 def stable_motifs(r):
 
 
-    #returns the stable motifs of a boolean model saved in r. r should be compatible with PyBoolNet format
+    """
+    Receives Boolean functions compatible with PyBoolNet format (r) and returns the stable motifs of the model saved in r.
 
-    #input: Boolean functions compatible with PyBoolNet format
-    #output: stable motifs of the Boolean model. Note that in plant pollinator networks we don't have self loops, hence we are
-    # only looking for maximal trap spaces or stable motifs with length larger than 1. For other models, this line should be commented.
+    Keyword arguments:
+        r -- Boolean functions compatible with PyBoolNet format
+
+    Returns:
+        maxts -- stable motifs of the Boolean model.
+        Note that in plant pollinator networks we do not have self loops, hence we are only looking for maximal trap spaces
+        (stable motifs) with length larger than 1. For other models, this line should be commented.
+    """
+
 
     primes = PyBoolNet.FileExchange.bnet2primes(r)
     PyBoolNet.PrimeImplicants.percolate_and_remove_constants(primes)
@@ -43,18 +89,24 @@ def stable_motifs(r):
 
 
 
+
 def order(csms,mapping,bridge):
 
 
-    #pre-checks for the possibility of one csm containing the condition of another and sorts them accordingly
-    #if csm1 contains any of the conditions of csm2, it is possible that csm1 is part of the support of csm2, so the support of csm1 should be found first.
+    """
+    Pre-checks for the possibility of one csm containing the condition of another and sorts them accordingly.
+    For example, if csm_1 contains any of the conditions of csm_2, it is possible that csm_1 is part of the support of csm_2, so
+    the support of csm_1 should be found first.
 
-    #inputs:
-    #csms: list of conditionally stable motifs
-    #mapping: a dictionary mapping from pl-po notation to 'number index' notation
-    #bridge: intersection of the LDOI of active stable motifs and virtual nodes inside the maximal SCCs
+    Keyword arguments:
+        csms -- list of conditionally stable motifs
+        mapping --  a dictionary mapping from plant pollinator (pl-po) notation to 'number index' notation
+        bridge -- intersection of the LDOI of active stable motifs and virtual nodes inside the maximal SCCs
 
-    #output: the ordered list of conditionally stable motifs
+    Returns:
+        csms -- the ordered list of conditionally stable motifs
+    """
+
 
     import math
     ignore = []
@@ -78,7 +130,6 @@ def order(csms,mapping,bridge):
                         ignore.append([csms[j1], csms[i1]])
                         bool = True
                         break
-
 
 
                     elif NO.intersection(list(csms[i1][1]), NO.find_nodes_in_this_motif(csms[j1][0], mapping)) and j1 > i1 and \
@@ -108,7 +159,6 @@ def order(csms,mapping,bridge):
             break
 
 
-
         else:
             #print('here')
             #print(csms[i1])
@@ -126,7 +176,6 @@ def order(csms,mapping,bridge):
                 swap.append([csms[i1], csms[j1]])
 
 
-
     return csms
 
 
@@ -134,11 +183,18 @@ def order(csms,mapping,bridge):
 
 def self_consistence_check(comp,cycles_mapping,mapping):
 
-    #returns True if an SCC in the cycle graph is consistent, and False otherwise
-    #inputs:
-    #comp: an SCC of cycle graph like {'c0', 'c1', 'c2'}
-    #cycles_mapping: a dictionary assigning a 'c'+number to each consistent cycle of the expanded network. the function map() generates this
-    #mapping: a dictionary mapping from pl-po notation to 'number index' notation
+
+    """
+    Checks the consistency of an SCC in the cycle graph. Returns True if an SCC in the cycle graph is consistent, and False otherwise.
+
+    Keyword arguments:
+        comp: an SCC of cycle graph like {'c0', 'c1', 'c2'}
+        cycles_mapping: a dictionary assigning a 'c'+number to each consistent cycle of the expanded network. the function map() generates this
+        mapping: a dictionary mapping from pl-po notation to 'number index' notation
+
+    Returns:
+        True if an SCC in the cycle graph is consistent, and False otherwise.
+    """
 
 
     list = []
@@ -156,15 +212,17 @@ def self_consistence_check(comp,cycles_mapping,mapping):
 def csm_finder_positive_edges(cycles, mapping,write_cycle_graph):
 
 
+    """
+    Finds the conditionally stable motifs of a negative edge free network based on cycle graph constructed only using the inactive cycles.
 
-    # the function that finds the conditionally stable motifs of a negative edge free network based on cycle graph constructed only using the inactive cycles
-    # inputs:
-    # cycles: consistent cycles of the expanded network as the function consistent_cycles() of relationship_operations produces.
-    # mapping: a dictionary mapping from pl-po notation to 'number index' notation
-    #write_cycle_graph: if it's True, cycle graph will be written in a gml file
+    Keyword arguments:
+        cycles: consistent cycles of the expanded network as the function consistent_cycles() of relationship_operations produces.
+        mapping: a dictionary mapping from plant pollinator (pl-po) notation to 'number index' notation
+        write_cycle_graph: if it is set to True, cycle graph will be written in a gml file
 
-    # output:
-    # the ordered list of inactive csms
+    Returns:
+        csms -- the ordered list of inactive csms
+    """
 
 
     cycle_graph = nx.DiGraph()
@@ -199,9 +257,6 @@ def csm_finder_positive_edges(cycles, mapping,write_cycle_graph):
                         and NO.intersection_negation(list(conditional_cycles[i][1]),NO.find_nodes_in_this_motif(conditional_cycles[j][0], mapping))==False \
                         and NO.intersection_negation(list(conditional_cycles[j][1]),NO.find_nodes_in_this_motif(conditional_cycles[i][0], mapping))==False:
 
-
-
-
                         if NO.intersection(list(conditional_cycles[i][1]),NO.find_nodes_in_this_motif(conditional_cycles[j][0], mapping)) == True:
 
 
@@ -215,10 +270,8 @@ def csm_finder_positive_edges(cycles, mapping,write_cycle_graph):
                                 cycle_graph.add_edge(key_list[position_i], key_list[position_j])
 
 
-
     if write_cycle_graph==True:
         nx.write_gml(cycle_graph, 'cycle_graph' + '.gml')
-
 
 
     cycle_graph_scc = [x for x in list(nx.strongly_connected_components(cycle_graph)) if len(x) > 1]
@@ -244,7 +297,6 @@ def csm_finder_positive_edges(cycles, mapping,write_cycle_graph):
             SCCs_of_cycle_graph_including_sms.append([buffer, set(remaining_conds)])
             if len(remaining_conds) != 0:
                 csms.append([buffer, set(remaining_conds)])
-
 
 
     # finding the cycles that did not participate in cycle graph SCC
@@ -293,26 +345,28 @@ def csm_finder_positive_edges(cycles, mapping,write_cycle_graph):
 
 def csm_finder_general_function(cycles, mapping, G_expanded,write_cycle_graph):
 
-    # the function that finds the conditionally stable motifs of any network based on cycle graph constructed using all consistent cycles
-    # of the expanded network.
-    # This function looks for smaller SCSs within the maximal SCCs in the cycle graph
-    # This function constructs the cycle_graph_ME, a digragh object that has the mutual exclusivity information between the consistent cycles. It uses
-    # the information in this object to break the maximal inconsistent SCC into consistent pieces.
-    #function break_the_SCC() is embedded within this function to break the inconsistent SCCs of cycle graph into maximal consistent SCCs.
+
+    """
+    Finds the conditionally stable motifs of any network based on cycle graph constructed using all consistent cycles
+    of the expanded network.
+    This function looks for smaller SCSs within the maximal SCCs in the cycle graph
+    This function constructs the cycle_graph_ME, a digragh object that has the mutual exclusivity information between the consistent cycles. It uses
+    the information in this object to break the maximal inconsistent SCC into consistent pieces.
+    function break_the_SCC() is embedded within this function to break the inconsistent SCCs of cycle graph into maximal consistent SCCs.
 
 
-    # inputs:
-    # cycles: consistent cycles of the expanded network as the function consistent_cycles() of relationship_operations produces.
-    # mapping: a dictionary mapping from pl-po notation to 'number index' notation
-    #write_cycle_graph: if it's True, cycle graph and cycle_graph_ME will be written in two separate gml files
+    Keyword arguments:
+        cycles: consistent cycles of the expanded network as the function consistent_cycles() of relationship_operations produces.
+        mapping: a dictionary mapping from pl-po notation to 'number index' notation
+        write_cycle_graph: if it's True, cycle graph and cycle_graph_ME will be written in two separate gml files
 
-    # output:
-    # the ordered list of csms
+    Returns:
+        csms -- the ordered list of csms
+    """
 
-    #extras:
-    #bridge_list: a list of lists. Each list is the intersection of LDOI of one active SM and the virtual nodes inside the maximal
+    # bridge_list: a list of lists. Each list is the intersection of LDOI of one active SM and the virtual nodes inside the maximal
     # CSM (S_i in the paper)
-    #keep: the intermediate CSMs that might have a support and we need to keep
+    # keep: the intermediate CSMs that might have a support and we need to keep
 
 
     keep=[]
@@ -583,18 +637,26 @@ def csm_finder_general_function(cycles, mapping, G_expanded,write_cycle_graph):
 
 
 
+
 def find_supports(csm, mapping, G_expanded, G_rel,FVS_size,list_of_names, number_of_neg_edges):
 
 
-    # returns the list of supports of each CSM
-    # inputs:
-    # csm: conditionally stable motif
-    # mapping: a dictionary mapping from pl-po notation to 'number index' notation
-    # G_expanded: the expanded network as Gang Yang's function Get_expanded_network() produces
-    # G_rel: network of functional relationships between the stable motifs and motif groups in the form of a digraph
-    # FVS_size: feedback vertex set size
-    # list_of_names: a list of strings, each of which is a stable motif or a conditionally stable motif such as ['pl_0p=0;po_0p=0;', 'pl_1p=0;po_1p=0;']
-    # number_of_neg_edges: number of negative edges in the network
+    """
+    Returns the list of supports of each CSM
+
+    Keyword arguments:
+        csm -- the conditionally stable motif
+        mapping -- a dictionary mapping from pl-po notation to 'number index' notation
+        G_expanded -- the expanded network as Gang Yang's function Get_expanded_network() produces
+        G_rel -- network of functional relationships between the stable motifs and motif groups in the form of a digraph
+        FVS_size -- feedback vertex set size
+        list_of_names -- a list of strings, each of which is a stable motif or a conditionally stable motif such as ['pl_0p=0;po_0p=0;', 'pl_1p=0;po_1p=0;']
+        number_of_neg_edges -- number of negative edges in the network
+
+    Returns:
+        support_dict -- a list of supports of the conditionally stable motif
+    """
+
 
     G_rel_nodes=[]
     if number_of_neg_edges==0:
@@ -605,7 +667,6 @@ def find_supports(csm, mapping, G_expanded, G_rel,FVS_size,list_of_names, number
 
     else:
         G_rel_nodes=G_rel.nodes(data=True)
-
 
 
 
@@ -656,20 +717,22 @@ def find_supports(csm, mapping, G_expanded, G_rel,FVS_size,list_of_names, number
 
 
 
-
 def cycle_graph_virtual_node_based(lines,write_cycle_graph=False):
 
-    #constructs cycle graph using the virtual nodes. For each virtual node in the expanded network adds an edge from
-    # the cycles that contain that virtual node inside them to the cycles that have that virtual node in their composite nodes and
-    # are consistent
+
+    """
+    Constructs cycle graph using the virtual nodes. For each virtual node in the expanded network adds an edge from
+    the cycles that contain that virtual node inside them to the cycles that have that virtual node in their composite nodes and
+    are consistent
 
 
-    #inputs:
-    #lines: Boolean functions read from the text file using function readlines()
-    #write_cycle_graph: if it's True, cycle graph and cycle_graph_ME will be written in two separate gml files
+    Keyword arguments:
+        lines: Boolean functions read from the text file using function readlines()
+        write_cycle_graph: if it's True, cycle graph will be written in a gml file
 
-    #output: writes cycle graph in a gml file.
-
+    Returns:
+        cycle_graph -- cycle graph
+    """
 
     # build the network from the lines
     Gread, readnodes = BDOIp.form_network(lines, sorted_nodename=False)
@@ -753,12 +816,4 @@ def cycle_graph_virtual_node_based(lines,write_cycle_graph=False):
 
 
     return cycle_graph
-
-
-
-
-
-
-
-
 
