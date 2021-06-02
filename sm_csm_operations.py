@@ -23,7 +23,7 @@ find_supports(csm, mapping, G_expanded, G_rel,FVS_size,list_of_names, number_of_
 a list of its supports.
 
 cycle_graph_virtual_node_based(lines,write_cycle_graph=False): Takes the Boolean functions, and constructs and writes the cycle graph based
-on virtual nodes of the expanded network. 
+on virtual nodes of the expanded network.
 
 Author: Fatemeh Sadat Fatemi Nasrollahi.
 Date: May 2021
@@ -816,4 +816,3 @@ def cycle_graph_virtual_node_based(lines,write_cycle_graph=False):
 
 
     return cycle_graph
-
