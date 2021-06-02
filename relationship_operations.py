@@ -240,7 +240,7 @@ def construct_relationships_network(lines,rules,write_cycle_graph):
 
         found_counter_array.append(found_counter)
 
-    alpha=[]
+    alpha=[] # alpha -- the number of unstabilized nodes after substituting the specific motif/motif group
     for rel_node in G_rel.nodes():
 
 
