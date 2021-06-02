@@ -51,6 +51,9 @@ These files are used to perform the analysis reported in the paper:
 ### Figures in supplemental material
 * Figure_S_2.py generates the network of functional relationships in figure S2 using the function `construct_relationships_network()`. 
 
+### Performance analysis
+
+* Performance_example.py illustrates the use of attractor identification functions of 'SM analysis 21' and 'PyBoolNet'. This script is the example of the performance analysis we did for one of the networks. Note that 'SM analysis 2013' is written in java, so one would either need to run the java code independently or import subprocess to be able to run it from python. 
 
 ## Requirements
 
