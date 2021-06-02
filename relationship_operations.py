@@ -161,7 +161,7 @@ def construct_relationships_network(lines,rules,write_cycle_graph):
 
 
     #conditionally stable motifs
-    number_of_neg_edges = NO.number_of_negative_edges_text(lines)
+    number_of_neg_edges = MO.number_of_negative_edges_text(lines)
 
     if number_of_neg_edges==0:
         csms= SMO.csm_finder_positive_edges(formatted_M_list, mapping,write_cycle_graph=write_cycle_graph)
