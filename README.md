@@ -26,7 +26,7 @@ There are five modules each of which focuses on a group of operations that are s
 4. **Relationship operarions (relationship_operations.py):** It contains the function that construct the network of functional relationships in which nodes are stable motifs or motif groups (each motif group is a conditionally stable motif with one of its supports) and edges are functional relationships logical determination and mutual exclusivity between the nodes. It also contains all other functions that find and detect logical determinations and mutual exclusivities among the nodes. 
 5. **Attractor operations (attrs_operations.py):** It contains the functions that find the self consistent groups of stable motifs and motif groups that are mutually exclusive. These groups lead to distinct attractors. 
 
-## Example implementation
+## Example implementations
 
 There are several python files with examples. These files demonstrate the workflow in simple use cases.
 1. File example_1.py demostrates generation of disjunctive prime form and simplified Boolean models for plant pollinator networks in text files. There are several inputs that can be provided if necessary: perturb, wp, IC, and write_IC. These inputs provide the option of having initial conditions or/and perturbation in the Boolean model written in the text files. Functions `disjunctive_prime_form_text_file()` and `simplification_text_file()` write the Boolean functions in text files. 
