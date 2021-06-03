@@ -1,9 +1,0 @@
-#BOOLEAN RULES
-A1*=B1
-B1*=C1 and not A1
-C1*=B1
-D1*=C1 and not E1
-E1*=D1 or F1
-F1*=E1
-G1*=H1
-H1*=C1
