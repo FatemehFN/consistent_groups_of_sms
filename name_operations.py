@@ -26,7 +26,7 @@ intersection_items(list1, list2): Takes two lists, and returns the list of mutua
 intersection_negation(list1,list2): Takes two lists of node states, and returns True if one of the lists contains the negation of one node
 state in the other list, and False otherwise.
 
-Author: Fatemeh Sadat Fatemi Nasrollahi.
+Author: Fatemeh Sadat Fatemi Nasrollahi unless otherwise noted.
 Date: May 2021
 Python Version: 3.7
 """
