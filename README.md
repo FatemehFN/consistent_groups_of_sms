@@ -4,13 +4,27 @@ This repository is the python implementation of the attractor identification met
 
 Fatemeh Sadat Fatemi Nasrollahi, Jorge Gómez Tejeda Zañudo, Colin Campbell, and Réka Albert. The relationships among generalized positive feedback loops determine possible community outcomes in plant-pollinator interaction networks.
 
-This code first finds the stable positive feedback loops (stable motifs) and the conditionally stable positive feedback loops (conditionally stable motifs) in plant-pollinator Boolean models in the work of Campbell et al. 2011. Then it finds three relationships between such feedback loops: dependence, mutual exclusivity, and logical determination. Based on these relationships, it finds self-consistent groups of these motifs that mutually exclude each other. These groups lead to attractors of the Boolean models. In plant-pollinator interaction networks the attractors correspond to stable community outcomes. 
+## Features
+
+This repository has a set of modules that are useful for:
+* Generating the Boolean disjunctive prime form from the threshold functions. This is currently hard coded for the threshold functions on Campbell et al. model (with the weight of 4 for positive regulators and -1 for negative regulators).
+* Generating the simplified Boolean model from the threshold functions. This is currently hard coded for the threshold functions on Campbell et al. model (with the weight of 4 for positive regulators and -1 for negative regulators).
+* Build and save the expanded network for the Boolean models.
+* Find the stbale generalized positive feedback loops (stable motifs) of Boolean models.
+* Construct and save the cycle graph in which nodes are the consistent conditional cycles of the expanded network and edges represent partial condition satisfaction between the nodes. For example an edge from cycle C<sub>1</sub> to cycle C<sub>2</sub> means that a virtual node in C<sub>1</sub> satisfies a condition in C<sub>2</sub>. 
+* Find the conditonally stable motifs and their supports in plant-pollinator Boolean models. 
+* Construct the network of functional relationships according to the identified stable motifs, conditionally stable motifs and their supports. In this network nodes are either stable motifs or motif groups (each motif group consists of one conditionally stable motif and one of its supports), and edges represent logical determination and mutual exclusivity between the nodes. Logical determination edge from node M<sub>1</sub> to node M<sub>2</sub> shows that if M<sub>1</sub> stabilizes, M<sub>2</sub> automatically stabilizes. Mutual exclusivity between nodes M<sub>1</sub> and M<sub>2</sub> shows that they both contain the same node, but in different states. 
+* Find maximal consistent groups of stable motifs and motif groups that mutually exclude each other. These groups lead to attractors of the Boolean model. 
+
+## Attractor identification workflow
+
+First the simplified Boolean model is read from a text file. The model then is analyzed to find the stable motifs and the conditionally stable motifs in plant-pollinator Boolean models in the work of Campbell et al. 2011. Then it finds three relationships between such stable motifs: dependence, mutual exclusivity, and logical determination. Based on these relationships, it finds self-consistent groups of these motifs that mutually exclude each other. These groups lead to attractors of the Boolean models. In plant-pollinator interaction networks the attractors correspond to stable community outcomes. 
 
 ## Data files
 
 There are model examples of plant-pollinator and plant-pollinator like networks in two directories:
 
-1. **plant_pollinator_models** is a directory that has several plant-pollinator models stroed in text files. The name of each text file consistes of thress number separated with an undeline. These numbers show the number of plants in that network, the number of pollinators in that network, and the network ID in the ensemble respectively.
+1. **plant_pollinator_models** is a directory that has several plant-pollinator models stroed in text files. The name of each text file consistes of thress number separated with an undeline. These numbers show the number of plants in that network, the number of pollinators in that network, and the network ID in the ensemble respectively. Each file contains the Boolean functions of the simplified model, i.e., 
 2. **plant_pollinator_like_models** is a directory that has network models with Boolean functions that follow the regularities in plant-pollinator models of Cambell et al..   
 
 The Boolean regulatory functions of models used in the figures of the paper are stored in text file format in **Figures_data** directory.
