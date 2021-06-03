@@ -25,7 +25,7 @@ and number of nodes in the network and returns the number of unstabilized nodes 
 number_of_negative_edges_text(lines): Takes the Boolean functions read with function readlines() and returns the number of negative edges
 in the model.
 
-Author: Fatemeh Sadat Fatemi Nasrollahi.
+Author: Fatemeh Sadat Fatemi Nasrollahi unless otherwise noted.
 Date: May 2021
 Python Version: 3.7
 """
