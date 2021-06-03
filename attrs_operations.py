@@ -10,7 +10,7 @@ are mutually exclusive (and hence lead to attractors) and the number of attracto
 is_new_attractor(SCcom,attrs,G_rel): Takes a group of stable motifs and motif groups, the previously found attractors, and the network
 of functional relationships, and returns True if the group mutually excludes all previously found attractors, and False otherwise.
 
-Author: Fatemeh Sadat Fatemi Nasrollahi.
+Author: Fatemeh Sadat Fatemi Nasrollahi unless otherwise noted.
 Date: May 2021
 Python Version: 3.7
 """
