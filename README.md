@@ -20,16 +20,6 @@ This repository has a set of modules that are useful for:
 
 First the simplified Boolean model is read from a text file. The model then is analyzed to find the stable motifs and the conditionally stable motifs in plant-pollinator Boolean models in the work of Campbell et al. 2011. Then it finds three relationships between such stable motifs: dependence, mutual exclusivity, and logical determination. Based on these relationships, it finds self-consistent groups of these motifs that mutually exclude each other. These groups lead to attractors of the Boolean models. In plant-pollinator interaction networks the attractors correspond to stable community outcomes. 
 
-## Data files
-
-There are model examples of plant-pollinator and plant-pollinator like networks in two directories:
-
-1. **plant_pollinator_models** is a directory that has several plant-pollinator models stroed in text files. The name of each text file consistes of thress number separated with an undeline. These numbers show the number of plants in that network, the number of pollinators in that network, and the network ID in the ensemble respectively. Each file contains the Boolean functions of the simplified model, i.e., 
-2. **plant_pollinator_like_models** is a directory that has network models with Boolean functions that follow the regularities in plant-pollinator models of Cambell et al..   
-
-The Boolean regulatory functions of models used in the figures of the paper are stored in text file format in **Figures_data** directory.
-
-
 ## Operation files
 
 There are five modules each of which focuses on a group of operations that are similar:
@@ -39,6 +29,15 @@ There are five modules each of which focuses on a group of operations that are s
 3. **Stable motif and conditionally stable motif operations (sm_csm_operations.py):** It contains the functions that find stable motifs, conditionally stable motifs, and the support of conditionally stable motifs. It also contains the function one can use the build the cycle graph.
 4. **Relationship operarions (relationship_operations.py):** It contains the function that construct the network of functional relationships in which nodes are stable motifs or motif groups (each motif group is a conditionally stable motif with one of its supports) and edges are functional relationships logical determination and mutual exclusivity between the nodes. It also contains all other functions that find and detect logical determinations and mutual exclusivities among the nodes. 
 5. **Attractor operations (attrs_operations.py):** It contains the functions that find the self consistent groups of stable motifs and motif groups that are mutually exclusive. These groups lead to distinct attractors. 
+
+## Data files
+
+There are model examples of plant-pollinator and plant-pollinator like networks in two directories:
+
+1. **plant_pollinator_models** is a directory that has several plant-pollinator models stroed in text files. The name of each text file consistes of thress number separated with an undeline. These numbers show the number of plants in that network, the number of pollinators in that network, and the network ID in the ensemble respectively. Each file contains the Boolean functions of the simplified model. The species (nodes) that do not have positive regulators cannot establish and their regulatory function is equal to False, the species that only have positive regulators after simplification have a regulatory function with positive regulators connected by *OR* operator, and the species that have both positive and negative regulators after simplification have a regulatory function with positive regulators connected by *OR* operator and negative regulators connected by *AND NOT*. The nodes are listed as they were appeared in the original network in DiGraph format.  
+2. **plant_pollinator_like_models** is a directory that has network models with Boolean functions that follow the regularities in plant-pollinator models of Cambell et al..   
+
+The Boolean regulatory functions of models used in the figures of the paper are stored in text file format in **Figures_data** directory.
 
 ## Example implementations
 
