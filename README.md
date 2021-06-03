@@ -53,7 +53,7 @@ These files are used to perform the analysis reported in the paper:
 
 ### Performance analysis
 
-* Performance_example.py illustrates the use of attractor identification functions of 'SM analysis 21' and 'PyBoolNet'. This script is the example of the performance analysis we did for one of the networks. Note that 'SM analysis 2013' is written in java, so one would either need to run the java code independently or import subprocess to be able to run it from python. 
+* Performance_example.py illustrates the use of attractor identification functions of 'SM analysis 2021' and 'PyBoolNet'. This script is the example of the performance analysis we did for one of the networks. Note that 'SM analysis 2013' is written in java, so one would either need to run the java code independently or import subprocess to be able to run it from python. 
 
 ## Requirements
 
