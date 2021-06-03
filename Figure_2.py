@@ -1,5 +1,14 @@
+"""
+This scripts contains the code that generates the network in Figure 2(a), and feeds it into the function disjunctive_prime_form_text_file()
+to convert the threshold functions to disjunctive prime form and save it in a text file. The text file represents
+the network in Figure 2(c). Comparing the edges in the original network and the one in the text file, one can see the loss of edges due to
+this conversion.
+"""
+
+
 import networkx as nx
 import model_operations as MO
+
 
 
 
@@ -16,22 +25,17 @@ edge_sign={}
 for edge in G.edges()[0:6]:
     edge_sign.update({edge:1})
 
-
 edge_sign.update({G.edges()[6]:-1})
 edge_sign.update({G.edges()[7]:1})
 for edge in G.edges()[8:]:
     edge_sign.update({edge:-1})
 
-
 nx.set_edge_attributes(G,'data',edge_sign)
-
-
 
 #the edges in the original network
 print('The edges in the original network')
 for item in G.edges(data=True):
     print(item)
-
 
 #generates the Boolean functions in disjunctive prime form in a text file
 MO.disjunctive_prime_form_text_file(G,network_number=1,plant=2,pollinator=5)
