@@ -38,7 +38,7 @@ and False otherwise
 merge_mutual_DOIs(G_rel): Takes the network of functional relationships, and merges the nodes that have LDOI relationships. Returns the
 network of functional relationships after the merging.
 
-Author: Fatemeh Sadat Fatemi Nasrollahi.
+Author: Fatemeh Sadat Fatemi Nasrollahi unless otherwise noted.
 Date: May 2021
 Python Version: 3.7
 """
