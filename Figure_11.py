@@ -1,8 +1,13 @@
+"""
+This scripts solves equation B1 and generates the data in Figure 11 in the appendix. For each number of positive and negative
+regulators of each node, it calculates how many negative edges we keep in the Boolean function of the same node in the simplified model.
+"""
+
+
 import math
 import numpy as np
 
 
-#this loop generates the number of negative edges we keep in the Boolean functions of plant pollinator networks after simplification.
 
 
 for p in range (1,26): # number of positive regulators
@@ -30,7 +35,6 @@ for p in range (1,26): # number of positive regulators
                     break
                 else:
                     x=x-1
-
 
             print('\nNumber of positive regulators (N_p): '+str(p))
             print('Total number of negative regulators (N_n): '+str(n))
