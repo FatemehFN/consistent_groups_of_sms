@@ -25,7 +25,7 @@ a list of its supports.
 cycle_graph_virtual_node_based(lines,write_cycle_graph=False): Takes the Boolean functions, and constructs and writes the cycle graph based
 on virtual nodes of the expanded network.
 
-Author: Fatemeh Sadat Fatemi Nasrollahi.
+Author: Fatemeh Sadat Fatemi Nasrollahi unless otherwise noted.
 Date: May 2021
 Python Version: 3.7
 """
