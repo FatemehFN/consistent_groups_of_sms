@@ -1,3 +1,10 @@
+"""
+This script shows the workflow for generating the network of functional relationships in Figure 5. The Boolean model is
+read from the text file and given to function construct_relationships_network() to construct the network of functional relationships among
+stable motifs and motif groups. One can see the nodes and edges of this DiGraph in the output.
+"""
+
+
 import relationship_operations as RO
 
 
