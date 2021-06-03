@@ -7,8 +7,8 @@ Fatemeh Sadat Fatemi Nasrollahi, Jorge Gómez Tejeda Zañudo, Colin Campbell, an
 ## Features
 
 This repository has a set of modules that are useful for:
-* Generating the Boolean disjunctive prime form from the threshold functions. This is currently hard coded for the threshold functions of Campbell et al. model (with the weight of 4 for positive regulators and -1 for negative regulators).
-* Generating the simplified Boolean model from the threshold functions. This is currently hard coded for the threshold functions of Campbell et al. model (with the weight of 4 for positive regulators and -1 for negative regulators).
+* Generating the Boolean disjunctive prime form from the network of the original species pool and the threshold functions. This is currently hard coded for the threshold functions of Campbell et al. model (with the weight of 4 for positive regulators and -1 for negative regulators).
+* Generating the simplified Boolean model from the network of the original species pool and the threshold functions. This is currently hard coded for the threshold functions of Campbell et al. model (with the weight of 4 for positive regulators and -1 for negative regulators).
 * Build and save the expanded network for the Boolean models.
 * Find the stbale generalized positive feedback loops (stable motifs) of Boolean models.
 * Construct and save the cycle graph in which nodes are the consistent conditional cycles of the expanded network and edges represent partial condition satisfaction between the nodes. For example an edge from cycle C<sub>1</sub> to cycle C<sub>2</sub> means that a virtual node in C<sub>1</sub> satisfies a condition in C<sub>2</sub>. 
