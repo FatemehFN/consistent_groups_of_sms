@@ -4,6 +4,8 @@ This repository is the python implementation of the attractor identification met
 
 Fatemeh Sadat Fatemi Nasrollahi, Jorge Gómez Tejeda Zañudo, Colin Campbell, and Réka Albert. The relationships among generalized positive feedback loops determine possible community outcomes in plant-pollinator interaction networks.
 
+In this work we develop an attractor identification method in plant-pollinator interaction networks governed by threshold functions (see Campbell et al. 2011 for more details on the model). 
+
 ## Features
 
 This repository has a set of modules that are useful for:
