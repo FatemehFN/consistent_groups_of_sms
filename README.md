@@ -4,7 +4,7 @@ This repository is the python implementation of the attractor identification met
 
 Fatemeh Sadat Fatemi Nasrollahi, Jorge Gómez Tejeda Zañudo, Colin Campbell, and Réka Albert. The relationships among generalized positive feedback loops determine possible community outcomes in plant-pollinator interaction networks.
 
-In this work we develop an attractor identification method in plant-pollinator interaction networks governed by threshold functions (see Campbell et al. 2011 for more details on the model). 
+In this work we develop an attractor identification method in plant-pollinator interaction networks governed by threshold functions (see [Campbell et al. 2011](https://www.pnas.org/content/108/1/197.short) for more details on the model). 
 
 ## Features
 
@@ -20,7 +20,17 @@ This repository has a set of modules that are useful for:
 
 ## Attractor identification workflow
 
-First the simplified Boolean model is read from a text file. The model then is analyzed to find the stable motifs and the conditionally stable motifs in plant-pollinator Boolean models in the work of Campbell et al. 2011. Then it finds three relationships between such stable motifs: dependence, mutual exclusivity, and logical determination. Based on these relationships, it finds self-consistent groups of these motifs that mutually exclude each other. These groups lead to attractors of the Boolean models. In plant-pollinator interaction networks the attractors correspond to stable community outcomes. 
+First the simplified Boolean model is read from a text file. These Boolean functions should be in booleannet format such as:
+```
+Node1*=Node2 or Node3
+Node2*=Node1 and not Node3
+Node3*=Node2
+```
+The text before *=* is the node name, the *** shows the future state of the node, and the text after *=* is the Boolean regulatory function of the node. 
+Note that:
+1. The name of one node should not be a part of the name of another node.
+2. The functions do not need to be in disjunctive prime form or disjunctive normal form. The code has functions that perform such conversions. 
+The model then is analyzed to find the stable motifs and the conditionally stable motifs in plant-pollinator Boolean models in the work of Campbell et al. 2011. Then it finds three relationships between such stable motifs: dependence, mutual exclusivity, and logical determination. Based on these relationships, it finds self-consistent groups of these motifs that mutually exclude each other. These groups lead to attractors of the Boolean models. In plant-pollinator interaction networks the attractors correspond to stable community outcomes. 
 
 ## Operation files
 
