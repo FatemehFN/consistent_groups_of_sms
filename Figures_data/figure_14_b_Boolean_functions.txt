@@ -1,8 +1,0 @@
-#BOOLEAN RULES
-
-pl_1*=po_3 and not po_1
-pl_2*=po_1 or po_2
-pl_3*=po_3
-po_1*=pl_1 and not pl_2
-po_2*=pl_1
-po_3*=pl_3
