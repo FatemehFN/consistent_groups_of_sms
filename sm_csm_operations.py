@@ -8,6 +8,9 @@ map(cycles): Takes the consistent cycles of the expanded network and assigns a k
 
 stable_motifs(r): Takes the Boolean functions of a model stored in r and returns the stable motifs.
 
+cycle_graph_virtual_node_based(lines,write_cycle_graph=False): Takes the Boolean functions, and constructs and writes the cycle graph based
+on virtual nodes of the expanded network.
+
 order(csms,mapping,bridge): Takes the conditionally stable motifs (CSMs) and returns the ordered list of CSMs.
 
 self_consistence_check(comp,cycles_mapping,mapping): Takes an SCC of the cycle graph and returns True if it is consistent,
@@ -21,9 +24,6 @@ the ordered list of conditionally stable motifs for a general network.
 
 find_supports(csm, mapping, G_expanded, G_rel,FVS_size,list_of_names, number_of_neg_edges): Takes a conditionally stable motif and returns
 a list of its supports.
-
-cycle_graph_virtual_node_based(lines,write_cycle_graph=False): Takes the Boolean functions, and constructs and writes the cycle graph based
-on virtual nodes of the expanded network.
 
 Author: Fatemeh Sadat Fatemi Nasrollahi unless otherwise noted.
 Date: May 2021
@@ -86,6 +86,109 @@ def stable_motifs(r):
     maxts=PyBoolNet.AspSolver.trap_spaces(primes, "max")
     maxts=[x for x in maxts if len(x) > 1] #The line explained above
     return maxts
+
+
+
+
+def cycle_graph_virtual_node_based(lines,write_cycle_graph=False):
+
+
+    """
+    Constructs cycle graph using the virtual nodes. For each virtual node in the expanded network adds an edge from
+    the cycles that contain that virtual node inside them to the cycles that have that virtual node in their composite nodes and
+    are consistent
+
+
+    Keyword arguments:
+        lines: Boolean functions read from the text file using function readlines()
+        write_cycle_graph: if it's True, cycle graph will be written in a gml file
+
+    Returns:
+        cycle_graph -- cycle graph
+    """
+
+    # build the network from the lines
+    Gread, readnodes = BDOIp.form_network(lines, sorted_nodename=False)
+
+
+    # build the expanded network
+    prefix, suffix = 'n', ''
+    G_expanded = BDOIp.Get_expanded_network(Gread, prefix=prefix, suffix=suffix)
+
+
+    # calculate the mapping from string nodename to index
+    mapping = {}
+    inverse_mapping = {}
+    for i, node in enumerate(readnodes):
+        index = prefix + str(i) + suffix
+        mapping[node] = index
+        inverse_mapping[index] = node
+        mapping['~' + node] = '~' + index
+        inverse_mapping['~' + index] = '~' + node
+
+
+    # add composite node to node mapping
+    for node in G_expanded.nodes():
+        if node not in mapping:
+            components = node.split('_')
+            composite_node = '_'.join([inverse_mapping[x] for x in components])
+            mapping[composite_node] = node
+            inverse_mapping[node] = composite_node
+
+
+    cycles = RO.consistent_cycles(G_expanded)
+    conditional_cycles=[x for x in cycles if len(x[1]) != 0]
+
+
+    cycle_graph = nx.DiGraph()
+
+
+    cycles_mapping = {}
+    for i in range(len(cycles)):
+        name = 'c' + str(i)
+        cycles_mapping[name] = cycles[i]
+
+    print('\ncycle mapping')
+    for item in cycles_mapping:
+        print(item,cycles_mapping[item])
+
+
+    key_list = list(cycles_mapping.keys())  # c1 c2
+    val_list = list(cycles_mapping.values())  # list of csms
+
+
+
+    virtual_nodes=[x for x in G_expanded.nodes() if '_' not in x]
+
+
+    for i in virtual_nodes:
+
+
+        source_cycles=[y for y in conditional_cycles if i in NO.find_nodes_in_this_motif(y[0],mapping)]
+        target_cycles=[z for z in conditional_cycles if i in list(z[1])]
+        for sc in source_cycles:
+            for tc in target_cycles:
+                if tc!=sc:
+                    if NO.intersection_negation(list(sc[1]), list(tc[1])) == False \
+                            and NO.intersection_negation(list(sc[1]), NO.find_nodes_in_this_motif(tc[0],mapping)) == False \
+                            and NO.intersection_negation(list(tc[1]),NO.find_nodes_in_this_motif(sc[0],mapping)) == False:
+
+                        position_sc = val_list.index(sc)
+                        position_tc = val_list.index(tc)
+
+
+                        if cycle_graph.has_edge(key_list[position_sc], key_list[position_tc]) == False:
+
+
+
+                            cycle_graph.add_edge(key_list[position_sc], key_list[position_tc])
+
+
+    if write_cycle_graph==True:
+        nx.write_gml(cycle_graph, 'cycle_graph.gml')
+
+
+    return cycle_graph
 
 
 
@@ -717,102 +820,3 @@ def find_supports(csm, mapping, G_expanded, G_rel,FVS_size,list_of_names, number
 
 
 
-def cycle_graph_virtual_node_based(lines,write_cycle_graph=False):
-
-
-    """
-    Constructs cycle graph using the virtual nodes. For each virtual node in the expanded network adds an edge from
-    the cycles that contain that virtual node inside them to the cycles that have that virtual node in their composite nodes and
-    are consistent
-
-
-    Keyword arguments:
-        lines: Boolean functions read from the text file using function readlines()
-        write_cycle_graph: if it's True, cycle graph will be written in a gml file
-
-    Returns:
-        cycle_graph -- cycle graph
-    """
-
-    # build the network from the lines
-    Gread, readnodes = BDOIp.form_network(lines, sorted_nodename=False)
-
-
-    # build the expanded network
-    prefix, suffix = 'n', ''
-    G_expanded = BDOIp.Get_expanded_network(Gread, prefix=prefix, suffix=suffix)
-
-
-    # calculate the mapping from string nodename to index
-    mapping = {}
-    inverse_mapping = {}
-    for i, node in enumerate(readnodes):
-        index = prefix + str(i) + suffix
-        mapping[node] = index
-        inverse_mapping[index] = node
-        mapping['~' + node] = '~' + index
-        inverse_mapping['~' + index] = '~' + node
-
-
-    # add composite node to node mapping
-    for node in G_expanded.nodes():
-        if node not in mapping:
-            components = node.split('_')
-            composite_node = '_'.join([inverse_mapping[x] for x in components])
-            mapping[composite_node] = node
-            inverse_mapping[node] = composite_node
-
-
-    cycles = RO.consistent_cycles(G_expanded)
-    conditional_cycles=[x for x in cycles if len(x[1]) != 0]
-
-
-    cycle_graph = nx.DiGraph()
-
-
-    cycles_mapping = {}
-    for i in range(len(cycles)):
-        name = 'c' + str(i)
-        cycles_mapping[name] = cycles[i]
-
-    print('\ncycle mapping')
-    for item in cycles_mapping:
-        print(item,cycles_mapping[item])
-
-
-    key_list = list(cycles_mapping.keys())  # c1 c2
-    val_list = list(cycles_mapping.values())  # list of csms
-
-
-
-    virtual_nodes=[x for x in G_expanded.nodes() if '_' not in x]
-
-
-    for i in virtual_nodes:
-
-
-        source_cycles=[y for y in conditional_cycles if i in NO.find_nodes_in_this_motif(y[0],mapping)]
-        target_cycles=[z for z in conditional_cycles if i in list(z[1])]
-        for sc in source_cycles:
-            for tc in target_cycles:
-                if tc!=sc:
-                    if NO.intersection_negation(list(sc[1]), list(tc[1])) == False \
-                            and NO.intersection_negation(list(sc[1]), NO.find_nodes_in_this_motif(tc[0],mapping)) == False \
-                            and NO.intersection_negation(list(tc[1]),NO.find_nodes_in_this_motif(sc[0],mapping)) == False:
-
-                        position_sc = val_list.index(sc)
-                        position_tc = val_list.index(tc)
-
-
-                        if cycle_graph.has_edge(key_list[position_sc], key_list[position_tc]) == False:
-
-
-
-                            cycle_graph.add_edge(key_list[position_sc], key_list[position_tc])
-
-
-    if write_cycle_graph==True:
-        nx.write_gml(cycle_graph, 'cycle_graph.gml')
-
-
-    return cycle_graph
