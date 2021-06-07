@@ -5,6 +5,8 @@ construct_relationships_network() to be analyzed for stable motifs, conditionall
 constructs the network of functional relationships between the stable motifs and motif groups. This network is saved in G_rel, which
 is later fed into the function consistent_groups_of_sms() to find the consistent groups of stable motifs and motif groups that mutually
 exclude each other and lead to attractors. This function returns such groups and the number of them.
+The user can also choose model_1 or model_2 from the 'other_models' directory to get the same result for a non plant-pollinator network.
+In that case: file_name='model_2.txt', f=open('other_models/'+file_name,'r'), and f1=open('other_models/'+file_name,'r').
 """
 
 
