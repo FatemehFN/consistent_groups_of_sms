@@ -1,8 +1,11 @@
 """
 This script shows the workflow for generating and saving the expanded network of the Boolean model in Figure 1 of the paper. First
-the network is built using the function form_network() from the module BooleanDOI_processing. The function form_network() was written
-by Colin Campbell. Then the network is fed into the function Get_expanded_network(), and the resulting expanded network is saved in G_expanded.
+the Boolean functions are read from a text file and the corresponding network Gread is built using the function form_network() from the
+module BooleanDOI_processing. The function form_network() was written by Colin Campbell.
+Then the network is fed into the function Get_expanded_network(), and the resulting expanded network is saved in G_expanded.
 G_expanded is then given to write_g_expanded() to be written and saved in a gml file.
+The user can also choose 'figure_13_Boolean_functions', 'figure_14_a_Boolean_functions', or 'figure_14_b_Boolean_functions' from the
+Figures_data directory to get the expanded network of the Boolean models in Figure 13 or Figure 14 in the Appendix.
 """
 
 
