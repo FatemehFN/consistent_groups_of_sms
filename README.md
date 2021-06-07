@@ -18,7 +18,7 @@ This repository has a set of modules that are useful for:
 * Construct the network of functional relationships according to the identified stable motifs, conditionally stable motifs and their supports. In this network nodes are either stable motifs or motif groups (each motif group consists of one conditionally stable motif and one of its supports), and edges represent logical determination and mutual exclusivity between the nodes. Logical determination edge from node M<sub>1</sub> to node M<sub>2</sub> shows that if M<sub>1</sub> stabilizes, M<sub>2</sub> automatically stabilizes. Mutual exclusivity between nodes M<sub>1</sub> and M<sub>2</sub> shows that they both contain the same node, but in different states. 
 * Find maximal consistent groups of stable motifs and motif groups that mutually exclude each other. These groups lead to attractors of the Boolean model. 
 
-## Attractor identification workflow
+## <a name="attr"></a> Attractor identification workflow
 
 First the simplified Boolean model is read from a text file. These Boolean functions should be in booleannet format such as:
 ```
@@ -58,23 +58,23 @@ The Boolean regulatory functions of models used in the figures of the paper are 
 
 There are several python files with examples. These files demonstrate the workflow in simple use cases.
 1. File example_1.py demostrates generation of disjunctive prime form and simplified Boolean models for plant pollinator networks in text files. There are several inputs that can be provided if necessary: perturb, wp, IC, and write_IC. These inputs provide the option of having initial conditions or/and perturbation in the Boolean model written in the text files. Functions `disjunctive_prime_form_text_file()` and `simplification_text_file()` write the Boolean functions in text files. 
-2. File example_2.py demonstrates how one can use the funtion `cycle_graph_virtual_node_based()` to construct the cycle graph. The Boolean functions should be read from a text file using fundtion `readlines()` and this is the only argument to the function `cycle_graph_virtual_node_based()`. It writes the cycle graph in a gml file that can be opened by YED. 
-3. Files example_3.py has an example of code execution for a plant pollinator network model. First the network of functional relationships should be constructed using the function `construct_relationships_network()`. Then that network should be provided for the `consistent_groups_of_sms()` function as an argument. This function finds the consistent groups of stable motifs and conditionally stable motifs that are mutually exclusive. It returns the number of attractors and the list of these mutually exclusive groups.         
-4. File example_4.py executes the same code as in example_3.py for plant-pollinator like network models.
+2. File example_2.py demonstrates how one can use the funtion `cycle_graph_virtual_node_based()` to construct the cycle graph. The Boolean functions in booleannet format explained [above](#attr) should be read from a text file using fundtion `readlines()`. This is the only argument to the function `cycle_graph_virtual_node_based()`. It writes the cycle graph in a gml file that can be opened by YED. 
+3. Files example_3.py has an example of code execution for a plant pollinator network model. First, the Boolean functions are read from a text file. The functions should be in booleannet format as noted [above](#attr). Then the network of functional relationships should be constructed using the function `construct_relationships_network()`. Then that network should be provided for the `consistent_groups_of_sms()` function as an argument. This function finds the consistent groups of stable motifs and conditionally stable motifs that are mutually exclusive. It returns the number of attractors and the list of these mutually exclusive groups. The user can also choose model_1.txt or model_2.txt from the 'other_models' directory to get the same result for a non plant-pollinator network.  
+
 
 ## Main analysis
 
 ### Figures in the paper
 These files are used to perform the analysis reported in the paper:
-* Figure_1.py illustrates the generation of the expanded network for the Boolean functions of figure 1 in the paper. 
+* Figure_1.py illustrates the generation of the expanded network for the Boolean functions of Figure 1 in the paper. The same code can reproduce the expanded networks in Figure 13 and Figure 14. 
 * Figure_2.py illustrates how the conversion of threshold functions to disjunctive prime form causes edge loss for the model in figure 2. The edges in the original network can be seen in the output, and the edges in the disjunctive prime form can be seen in the text file generated. 
-* Figure_4_5.py illustrates the generation of expanded network and cycle graph for the Boolean functions of the models in figure 4 and figure 5. Note that since we use cycle graph to identify conditionally stable motifs, we do not add the unconditional consistent cycles to it. 
+* Figure_4.py illustrates the generation of expanded network and cycle graph for the Boolean functions of the models in figure 4. Note that since we use cycle graph to identify conditionally stable motifs, we do not add the unconditional consistent cycles to it. The same code can reproduce the expanded networks and cycle graphs in Figure 5 and Figure 12. 
 * Figure_7.py implements the function `construct_relationships_network()` to generate the network of functional relationships for the Boolean functions in figure 7 in the paper. The edges and the nodes of this network are then printed in the output. 
 
 ### Figures in the appendices
 * Figure_11.py illustrates the generation of the data in figure 11 in the appendix. It solves inequality B1 for each number of positive and negative regulators. 
-* Figure_12.py illustrates the generation of expanded network and cycle graph for the Boolean functions of the models in figure 12. The code is the same as Figure_4_5.py, but it runs for a different model. 
-* Figure_13_14.py illustrates the generation of the expanded network for the Boolean functions of figure 13 and figure 14 in the appendix. The code is the same as Figure_1.py, but it runs for a different model. 
+* Figure 12 can be reproduced using the code saved in Figure_4.py
+* Figure 13 and Figure 14 can be reproduced using the code saved in Figure_1.py
 
 ### Figures in supplemental material
 * Figure_S_2.py generates the network of functional relationships in figure S2 using the function `construct_relationships_network()`. 
