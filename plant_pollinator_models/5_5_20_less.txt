@@ -1,0 +1,10 @@
+po_4p*=(pl_0p) 
+pl_0p*=(po_4p) 
+po_3p*=(pl_0p or pl_1p) 
+pl_4p*=False
+pl_1p*=(po_3p) 
+pl_3p*=(po_3p) 
+po_2p*=False
+pl_2p*=False
+po_0p*=(pl_0p) 
+po_1p*=False
