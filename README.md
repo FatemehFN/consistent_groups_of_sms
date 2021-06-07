@@ -66,15 +66,15 @@ There are several python files with examples. These files demonstrate the workfl
 
 ### Figures in the paper
 These files are used to perform the analysis reported in the paper:
-* Figure_1.py illustrates the generation of the expanded network for the Boolean functions of figure 1 in the paper. 
+* Figure_1.py illustrates the generation of the expanded network for the Boolean functions of Figure 1 in the paper. The same code can reproduce the expanded networks in Figure 13 and Figure 14. 
 * Figure_2.py illustrates how the conversion of threshold functions to disjunctive prime form causes edge loss for the model in figure 2. The edges in the original network can be seen in the output, and the edges in the disjunctive prime form can be seen in the text file generated. 
-* Figure_4_5.py illustrates the generation of expanded network and cycle graph for the Boolean functions of the models in figure 4 and figure 5. Note that since we use cycle graph to identify conditionally stable motifs, we do not add the unconditional consistent cycles to it. 
+* Figure_4.py illustrates the generation of expanded network and cycle graph for the Boolean functions of the models in figure 4. Note that since we use cycle graph to identify conditionally stable motifs, we do not add the unconditional consistent cycles to it. The same code can reproduce the expanded networks and cycle graphs in Figure 5 and Figure 12. 
 * Figure_7.py implements the function `construct_relationships_network()` to generate the network of functional relationships for the Boolean functions in figure 7 in the paper. The edges and the nodes of this network are then printed in the output. 
 
 ### Figures in the appendices
 * Figure_11.py illustrates the generation of the data in figure 11 in the appendix. It solves inequality B1 for each number of positive and negative regulators. 
-* Figure_12.py illustrates the generation of expanded network and cycle graph for the Boolean functions of the models in figure 12. The code is the same as Figure_4_5.py, but it runs for a different model. 
-* Figure_13_14.py illustrates the generation of the expanded network for the Boolean functions of figure 13 and figure 14 in the appendix. The code is the same as Figure_1.py, but it runs for a different model. 
+* Figure 12 can be reproduced using the code saved in Figure_4.py
+* Figure 13 and Figure 14 can be reproduced using the code saved in Figure_1.py
 
 ### Figures in supplemental material
 * Figure_S_2.py generates the network of functional relationships in figure S2 using the function `construct_relationships_network()`. 
