@@ -123,13 +123,13 @@ The first item is a dictionary of virtual nodes, i.e., the nodes and their state
 
 ### softwares and codes used 
 ---
-#### Ripositories
+#### Repositories
 * We used the python package PyBoolNet developed in [Klarner et al. 2017](https://academic.oup.com/bioinformatics/article/33/5/770/2725550?login=true) that can be found [here](https://github.com/hklarner/PyBoolNet) to find stable motifs and minimal trap spaces. The latter was found using PyBoolNet as a reference.
 * For performance comparison analyses we used the java implementation of [SM analysis 2013](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004193) that can be found [here](https://github.com/jgtz/StableMotifs), and python implementation of [SM analysis 2021](https://arxiv.org/abs/2009.05526) that can be found [here](https://github.com/jcrozum/StableMotifs). 
 
 #### Files
-* Files FVS.py and FVS_localsearch_10_python.py are taken from the [FVS python ripository](https://github.com/yanggangthu/FVS_python) by Gang Yang. 
-* Files BooleanDOI_DOI.py, BooleanDOI_processing.py and qm.py are taken from the [Boolean DOI python ripository](https://github.com/yanggangthu/BooleanDOI) by Gang Yang. 
+* Files FVS.py and FVS_localsearch_10_python.py are taken from the [FVS python repository](https://github.com/yanggangthu/FVS_python) by Gang Yang. 
+* Files BooleanDOI_DOI.py, BooleanDOI_processing.py and qm.py are taken from the [Boolean DOI python repository](https://github.com/yanggangthu/BooleanDOI) by Gang Yang. 
 * The file cool_bool_tools.py is written by Dávid Deritei.
 
 
