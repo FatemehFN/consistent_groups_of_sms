@@ -39,7 +39,7 @@ print(MO.number_of_negative_edges_text(lines))
 # number of minimal trap spaces from consistent groups of sms
 G_rel,list_of_names=RO.construct_relationships_network(lines,rules,write_cycle_graph=False)
 attrs,len_attrs=AO.consistent_groups_of_sms(G_rel,list_of_names,lines)
-print('number of minimal trap spaces from consistent groups of sms:')
+print('\nnumber of minimal trap spaces from consistent groups of sms:')
 print(len_attrs)
 
 # number of minimal trap spaces from PyBoolNet
@@ -47,5 +47,5 @@ rules = rules.replace(' *=', ',\t').replace('*=', ',\t').replace('not ', '!').re
     ' or ', ' | ').replace('False', '0').replace('#BOOLEAN RULES','')
 primes = PyBoolNet.FileExchange.bnet2primes(rules)
 mints = PyBoolNet.AspSolver.trap_spaces(primes, "min", MaxOutput=2000)
-print('number of minimal trap spaces from PyBoolNet:')
+print('\nnumber of minimal trap spaces from PyBoolNet:')
 print(len(mints))
