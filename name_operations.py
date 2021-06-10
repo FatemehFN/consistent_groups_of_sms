@@ -59,8 +59,6 @@ def turn_to_name(a):
 
 
 def turn_string_to_list_n(rel_node,mapping):
-
-
     """
     Returns a list of node states in 'number index' notation.
 
@@ -89,8 +87,6 @@ def turn_string_to_list_n(rel_node,mapping):
 
 
 def turn_string_to_dict_pl_po(string):
-
-
     """
     Receives a string and returns a dictionary of nodes and their states in plant pollinator (pl-po) notation.
 
@@ -116,8 +112,6 @@ def turn_string_to_dict_pl_po(string):
 
 
 def find_nodes_in_this_motif(primary, mapping):
-
-
     """
     Receives a dictionary of nodes and their states in pl-po notation or 'number index' notation and returns
     a list of node states in 'number index' notation
@@ -153,8 +147,6 @@ def find_nodes_in_this_motif(primary, mapping):
 
 
 def intersection(list1, list2):
-
-
     """
     Receives two lists of node states and returns a boolean value showing if the two have mutual node states or not.
 
@@ -182,8 +174,6 @@ def intersection(list1, list2):
 
 
 def intersection_v2(list1, list2):
-
-
     """
     Receives two lists of node states and returns a boolean value showing if the two have mutual nodes or not.
 
@@ -214,8 +204,6 @@ def intersection_v2(list1, list2):
 
 
 def intersection_items(list1, list2):
-
-
     """
     Receives two lists and returns the items that are mutual in the two.
 
@@ -244,8 +232,6 @@ def intersection_items(list1, list2):
 
 
 def intersection_negation(list1,list2):
-
-
     """
     Receives two lists and returns a boolean value showing if the negation of a node state in one list is in the other list.
 
