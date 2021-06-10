@@ -44,8 +44,6 @@ import random
 
 def disjunctive_prime_form_text_file(G, network_number, plant, pollinator, IC_number=0,
                                      IC=[], write_IC=False, perturb=False, wp=0,request_for_p_n_edges=False):
-
-
     """
     writes the Boolean functions of a pl-po threshold model in disjunctive prime form in a text file
     if request_for_p_n_edges==True it returns the number of remaining positive and negative edges after converting to disjunctive
@@ -208,8 +206,6 @@ def disjunctive_prime_form_text_file(G, network_number, plant, pollinator, IC_nu
 
 
 def find_false_nodes(G):
-
-
     """
     finds and returns the list of species that cannot establish under any circumstances and become extinct in all attractors.
     Figure 2 in the paper describes these nodes. These species either do not have any positive regulators or all their
@@ -280,8 +276,6 @@ def find_false_nodes(G):
 
 def simplification_text_file(G,network_number,plant,pollinator,IC=[],IC_number=0,
                              write_IC=False,more=False,less=True,perturb=False,wp=0):
-
-
     """
     simplifies and writes the Boolean functions of a plant pollinator threshold functions in disjunctive prime form in a text file.
     simplification method is explained in the paper.
@@ -553,8 +547,6 @@ def simplification_text_file(G,network_number,plant,pollinator,IC=[],IC_number=0
 
 
 def number_of_false_nodes(lines):
-
-
     """
     returns the number of nodes that are False in the text file
 
@@ -576,8 +568,6 @@ def number_of_false_nodes(lines):
 
 
 def write_g_expanded(G_expanded,model_name):
-
-
     """
     writes expanded network in a gml file that can be opened with yED.
 
@@ -596,8 +586,6 @@ def write_g_expanded(G_expanded,model_name):
 
 
 def number_of_unstabilized_nodes(nodes_to_find_downstream_of,rules,number_of_nodes):
-
-
     """
     Returns the number of unstabilized nodes after stabilizing a specific motif/motif group.
 
@@ -631,8 +619,6 @@ def number_of_unstabilized_nodes(nodes_to_find_downstream_of,rules,number_of_nod
 
 
 def number_of_negative_edges_text(lines):
-
-
     """
     Returns the number of negative edges in the Boolean model
 
