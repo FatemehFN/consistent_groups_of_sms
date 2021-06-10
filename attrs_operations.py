@@ -25,8 +25,6 @@ import FVS
 
 
 def is_new_attractor(SCcom,attrs,G_rel):
-
-
     """
     Returns True if the consistent combination of motifs/motif groups excludes all previously found attractor, and False otherwise.
 
@@ -51,8 +49,6 @@ def is_new_attractor(SCcom,attrs,G_rel):
 
 
 def consistent_groups_of_sms(G_rel, list_of_names,lines):
-
-
     """
     Calculates the number of q-attrs/minimal trap spaces based on the relationships between the motifs/motif groups
 
