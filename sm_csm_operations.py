@@ -41,8 +41,6 @@ import BooleanDOI_processing as BDOIp
 
 
 def map(cycles):
-
-
     """
     Generates the cycles_mapping that is a dictionary assigning a 'c'+number to each consistent cycle of the expanded network.
     example: {'c0': [{'n2': 0, 'n3': 0}, {'~n2', '~n0'}], 'c1': [{'n2': 0, 'n1': 0, 'n0': 0, 'n3': 0}, {'~n2', '~n0'}]}
@@ -66,8 +64,6 @@ def map(cycles):
 
 
 def stable_motifs(r):
-
-
     """
     Receives Boolean functions compatible with PyBoolNet format (r) and returns the stable motifs of the model saved in r.
 
@@ -91,8 +87,6 @@ def stable_motifs(r):
 
 
 def cycle_graph_virtual_node_based(lines,write_cycle_graph=False):
-
-
     """
     Constructs cycle graph using the virtual nodes. For each virtual node in the expanded network adds an edge from
     the cycles that contain that virtual node inside them to the cycles that have that virtual node in their composite nodes and
@@ -194,8 +188,6 @@ def cycle_graph_virtual_node_based(lines,write_cycle_graph=False):
 
 
 def order(csms,mapping,bridge):
-
-
     """
     Pre-checks for the possibility of one csm containing the condition of another and sorts them accordingly.
     For example, if csm_1 contains any of the conditions of csm_2, it is possible that csm_1 is part of the support of csm_2, so
@@ -285,8 +277,6 @@ def order(csms,mapping,bridge):
 
 
 def self_consistence_check(comp,cycles_mapping,mapping):
-
-
     """
     Checks the consistency of an SCC in the cycle graph. Returns True if an SCC in the cycle graph is consistent, and False otherwise.
 
@@ -313,8 +303,6 @@ def self_consistence_check(comp,cycles_mapping,mapping):
 
 
 def csm_finder_positive_edges(cycles, mapping,write_cycle_graph):
-
-
     """
     Finds the conditionally stable motifs of a negative edge free network based on cycle graph constructed only using the inactive cycles.
 
@@ -447,8 +435,6 @@ def csm_finder_positive_edges(cycles, mapping,write_cycle_graph):
 
 
 def csm_finder_general_function(cycles, mapping, G_expanded,write_cycle_graph):
-
-
     """
     Finds the conditionally stable motifs of any network based on cycle graph constructed using all consistent cycles
     of the expanded network.
@@ -742,8 +728,6 @@ def csm_finder_general_function(cycles, mapping, G_expanded,write_cycle_graph):
 
 
 def find_supports(csm, mapping, G_expanded, G_rel,FVS_size,list_of_names, number_of_neg_edges):
-
-
     """
     Returns the list of supports of each CSM
 
