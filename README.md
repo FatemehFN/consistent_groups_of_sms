@@ -8,9 +8,9 @@ In this work we develop an attractor identification method in plant-pollinator i
 
 ## Features
 
-This repository has a set of modules that are useful for:
-* Generating the Boolean disjunctive prime form from the network of the original species pool and the threshold functions. This is currently hard coded for the threshold functions of Campbell et al. model (with the weight of 4 for positive regulators and -1 for negative regulators).
-* Generating the simplified Boolean model from the network of the original species pool and the threshold functions. This is currently hard coded for the threshold functions of Campbell et al. model (with the weight of 4 for positive regulators and -1 for negative regulators).
+This repository has a set of modules that can be used to:
+* Generate the Boolean disjunctive prime form from the network of the original species pool and the threshold functions. This is currently hard coded for the threshold functions of Campbell et al. model (with the weight of 4 for positive regulators and -1 for negative regulators).
+* Generate the simplified Boolean model from the network of the original species pool and the threshold functions. This is currently hard coded for the threshold functions of Campbell et al. model (with the weight of 4 for positive regulators and -1 for negative regulators).
 * Build and save the expanded network for the Boolean models.
 * Find the stable generalized positive feedback loops (stable motifs) of Boolean models.
 * Construct and save the cycle graph in which nodes are the consistent conditional cycles of the expanded network and edges represent partial condition satisfaction between the nodes. For example, an edge from cycle C<sub>1</sub> to cycle C<sub>2</sub> means that a virtual node in C<sub>1</sub> satisfies a condition in C<sub>2</sub>. 
@@ -26,13 +26,13 @@ Node1*=Node2 or Node3
 Node2*=Node1 and not Node3
 Node3*=Node2
 ```
-The text before *=* is the node name, the * shows the future state of the node, and the text after *=* is the Boolean regulatory function of the node. 
+The text before \*= is the node name, and the text after \*= is the Boolean regulatory function of the node. 
 Note that:
 1. The name of one node should not be a part of the name of another node.
 2. The functions do not need to be in disjunctive prime form. The code has functions that perform such conversions. 
 3. For the node names use only alphanumeric characters (A-Z,a-z), numbers (0-9) and *_*. The reserved words for the program, which shouldn't be used for node names, are: *True*, *False*, *true*, *false*, *0*, *1*, *and*, *or*, and *not*.  
 
-The model then is analyzed to find the stable motifs and the conditionally stable motifs in plant-pollinator Boolean models in the work of Campbell et al. 2011. Then it finds three relationships between such stable motifs: dependence, mutual exclusivity, and logical determination. Based on these relationships, it finds self-consistent groups of these motifs that mutually exclude each other. These groups lead to attractors of the Boolean models. In plant-pollinator interaction networks the attractors correspond to stable community outcomes. 
+The model then is analyzed to find the stable motifs and the conditionally stable motifs in plant-pollinator Boolean models as in the work of Campbell et al. 2011. Then it finds three relationships between such stable motifs: dependence, mutual exclusivity, and logical determination. Based on these relationships, it finds self-consistent groups of these motifs that mutually exclude each other. These groups lead to attractors of the Boolean models. In plant-pollinator interaction networks the attractors correspond to stable community outcomes. 
 
 ## Operation files
 
@@ -49,8 +49,8 @@ There are two main functions: 1. `disjunctive_prime_form_text_file()` that recei
 
 There are model examples of plant-pollinator and plant-pollinator like networks in two directories:
 
-1. **plant_pollinator_models** is a directory that has several plant-pollinator models stored in text files. The name of each text file consists of three numbers separated with an underline. These numbers show the number of plants in that network, the number of pollinators in that network, and the network ID in the ensemble respectively. Each file contains the Boolean functions of the simplified model. The species (nodes) that do not have positive regulators cannot establish and their regulatory function is equal to False, the species that only have positive regulators after simplification have a regulatory function with positive regulators connected with *OR* operator, and the species that have both positive and negative regulators after simplification have a regulatory function with positive regulators grouped together with *OR* operator in parentheses and each of the negative regulators connected by *AND NOT*. The nodes are listed in the order they were saved in the original network in DiGraph format.  
-2. **other_models** is a directory that has network models with Boolean functions that follow the regularities in plant-pollinator models of Cambell et al.. They do not have self-loops and negative regulation is always accompanied by positive regulation in the opposite side. The positive regulators are connected with *OR* operator and negative regulators are connected with *AND NOT*.
+1. **plant_pollinator_models** is a directory that has several plant-pollinator models stored in text files. The name of each text file consists of three numbers separated with an underscore. These numbers show the number of plants in that network, the number of pollinators in that network, and the network ID in the ensemble respectively. Each file contains the Boolean functions of the simplified model. The species (nodes) that do not have positive regulators cannot establish and their regulatory function is equal to False, the species that only have positive regulators after simplification have a regulatory function with positive regulators connected with *OR* operator, and the species that have both positive and negative regulators after simplification have a regulatory function with positive regulators grouped together with *OR* operator in parentheses and each of the negative regulators connected by *AND NOT*. The nodes are listed in the order they were saved in the original network in DiGraph format.  
+2. **other_models** is a directory that has network models with Boolean functions that follow the regularities in plant-pollinator models of Campbell et al.. They do not have self-loops and negative regulation is always accompanied by positive regulation in the opposite side. The positive regulators are connected with *OR* operator and negative regulators are connected with *AND NOT*.
 
 The Boolean regulatory functions of models used in the figures of the paper are stored in text file format in **Figures_data** directory.
 
@@ -58,7 +58,7 @@ The Boolean regulatory functions of models used in the figures of the paper are 
 
 There are several python files with examples. These files demonstrate the workflow in simple use cases.
 1. File example_1.py demonstrates generation of disjunctive prime form and simplified Boolean models for plant pollinator networks in text files. There are several inputs that can be provided if necessary: perturb, wp, IC, and write_IC. These inputs provide the option of having initial conditions or/and perturbation in the Boolean model written in the text files. Functions `disjunctive_prime_form_text_file()` and `simplification_text_file()` write the Boolean functions in text files. 
-2. File example_2.py demonstrates how one can use the funtion `cycle_graph_virtual_node_based()` to construct the cycle graph. The Boolean functions in booleannet format explained [above](#attr) should be read from a text file using fundtion `readlines()`. This is the only argument to the function `cycle_graph_virtual_node_based()`. It writes the cycle graph in a gml file that can be opened by YED. 
+2. File example_2.py demonstrates how one can use the funtion `cycle_graph_virtual_node_based()` to construct the cycle graph. The Boolean functions in booleannet format explained [above](#attr) should be read from a text file using function `readlines()`. This is the only argument to the function `cycle_graph_virtual_node_based()`. It writes the cycle graph in a gml file that can be opened by [YED](https://www.yworks.com/products/yed). 
 3. Files example_3.py has an example of code execution for a plant pollinator network model. First, the Boolean functions are read from a text file. The functions should be in booleannet format as noted [above](#attr). Then the network of functional relationships should be constructed using the function `construct_relationships_network()`. Then that network should be provided for the `consistent_groups_of_sms()` function as an argument. This function finds the consistent groups of stable motifs and conditionally stable motifs that are mutually exclusive. It returns the number of attractors and the list of these mutually exclusive groups. The user can also choose model_1.txt or model_2.txt from the 'other_models' directory to get the same result for a non plant-pollinator network.  
 
 
