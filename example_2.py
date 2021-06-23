@@ -2,6 +2,10 @@
 This script shows the workflow for generating and writing the cycle graph for any imported Boolean model. First the model is read from
 a text file, then it is fed into the function cycle_graph_virtual_node_based() to generate the cycle graph. if write_cycle_graph=True, the
 cycle graph is written in a gml file.
+
+Author: Fatemeh Sadat Fatemi Nasrollahi unless otherwise noted.
+Date: May 2021
+Python Version: 3.7
 """
 
 
