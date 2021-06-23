@@ -7,6 +7,10 @@ is later fed into the function consistent_groups_of_sms() to find the consistent
 exclude each other and lead to attractors. This function returns such groups and the number of them.
 The user can also choose model_1 or model_2 from the 'other_models' directory to get the same result for a non plant-pollinator network.
 In that case: file_name='model_2.txt', f=open('other_models/'+file_name,'r'), and f1=open('other_models/'+file_name,'r').
+
+Author: Fatemeh Sadat Fatemi Nasrollahi unless otherwise noted.
+Date: May 2021
+Python Version: 3.7
 """
 
 
