@@ -3,6 +3,10 @@ This scripts shows the workflow for generating the disjunctive prime form and th
 functions of plant-pollinator interaction networks. First the network is read from file, and then it is fed into the function
 disjunctive_prime_form_text_file() to generate the disjunctive prime form of the Boolean functions in a text file. It can also be fed into
 the function simplification_text_file() to generate the simplified Boolean model written in a text file.
+
+Author: Fatemeh Sadat Fatemi Nasrollahi unless otherwise noted.
+Date: May 2021
+Python Version: 3.7
 """
 
 
