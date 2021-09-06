@@ -45,7 +45,7 @@ def map(cycles):
     Generates the cycles_mapping that is a dictionary assigning a 'c'+number to each consistent cycle of the expanded network.
     example: {'c0': [{'n2': 0, 'n3': 0}, {'~n2', '~n0'}], 'c1': [{'n2': 0, 'n1': 0, 'n0': 0, 'n3': 0}, {'~n2', '~n0'}]}
 
-    Keyword argument:
+    Keyword arguments:
         cycles -- consistent cycles of the expanded network as the function consistent_cycles() of relationship_operations produces.
 
     Returns:
