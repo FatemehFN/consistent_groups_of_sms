@@ -189,6 +189,8 @@ def construct_relationships_network(lines,rules,write_cycle_graph):
         if found_counter != 0 and len(found_counter_array) >= 2:
             if found_counter_array[-1] == found_counter_array[-2]:
                 break
+        elif found_counter==0 and sum(found_counter_array)==0 and len(found_counter_array) >= len(csms):
+            break
 
         for ind in range(len(csms)):
 
@@ -543,3 +545,138 @@ def merge_mutual_DOIs(G_rel):
 
 
     return G_rel
+
+
+
+
+
+def LDOI_threshold(G,node_list):
+
+    """
+    node_list: {'pl_2':1,'po_1':0 }
+    """
+    false_nodes=MO.find_false_nodes(G)[0]
+    #print('false nodes are:')
+    #print(false_nodes)
+    temp={}
+    for item in false_nodes:
+        temp.update({item:0})
+
+    H=G.subgraph([x for x in G.nodes() if x not in false_nodes])
+
+    constants={**temp,**node_list}
+    #print('constants are')
+    #print(constants)
+    LDOI=[]
+    starting_point = list(node_list.keys())
+    done=list(node_list.keys())
+    counter=[]
+    while True:
+
+        #print('counter')
+        #print(counter)
+        if len(counter)>=2 and counter[-1]==counter[-2]:
+            break
+
+        layer=[]
+        next_starting_point=[]
+        #print('starting point is')
+        #print(starting_point)
+        #print('constants are')
+        #print(constants)
+        for node in starting_point:
+            layer=[x[1] for x in H.edges() if x[0]==node]
+            next_starting_point+=layer
+            #print('layer')
+            #print(layer)
+
+            for target_node in layer:
+                #print('target node')
+                #print(target_node)
+                if target_node not in done:
+                    positive_regs = [x[0] for x in H.edges(data=True) if x[1] == target_node and
+                        x[2].get('data') == 1]
+                    negative_regs = [x[0] for x in H.edges(data=True) if x[1] == target_node and
+                        x[2].get('data') == -1]
+
+                    #print('regulators')
+                    #print(positive_regs)
+                    #print(negative_regs)
+                    constant_positives=NO.intersection_items(positive_regs,constants.keys())
+                    constant_negatives=NO.intersection_items(negative_regs,constants.keys())
+                    #print('constant positives')
+                    #print(constant_positives)
+                    #print('constant negatives')
+                    #print(constant_negatives)
+                    sum_incoming_interactions=0
+                    for p in constant_positives:
+                        if constants[p]==1:
+                            sum_incoming_interactions+=4
+
+                    for n in constant_negatives:
+                        if constants[n]==1:
+                            sum_incoming_interactions-=1
+
+
+                    #print('sum incoming interactions')
+                    #print(sum_incoming_interactions)
+                    if len(positive_regs)==len(constant_positives) and len(negative_regs)==len(constant_negatives):
+
+                        if target_node not in done:
+                            done.append(target_node)
+
+                        if sum_incoming_interactions>=1:
+                            LDOI.append(target_node)
+                            constants.update({target_node: 1})
+                        else:
+
+                            LDOI.append('~'+target_node)
+                            constants.update({target_node: 0})
+
+
+                    else:
+
+
+                        remaining_positives = [x for x in positive_regs if x not in constant_positives]
+                        remaining_negatives = [x for x in negative_regs if x not in constant_negatives]
+
+
+                        if node in constants.keys():
+                            if constants[node]==1 and node in positive_regs:
+                                if sum_incoming_interactions-len(remaining_negatives)>=1:
+                                    LDOI.append(target_node)
+                                    constants.update({target_node:1})
+                                    if target_node not in done:
+                                        done.append(target_node)
+
+                            elif constants[node]==0 and node in positive_regs:
+                                #print('here')
+                                if sum_incoming_interactions +4*len(remaining_positives)<= 0:
+                                    LDOI.append('~'+target_node)
+                                    constants.update({target_node: 0})
+                                    if target_node not in done:
+                                        done.append(target_node)
+
+
+                            elif constants[node]==1 and node in negative_regs:
+                                #print('here')
+                                if sum_incoming_interactions+ 4 * len(remaining_positives)<= 0:
+                                    LDOI.append('~'+target_node)
+                                    constants.update({target_node: 0})
+                                    if target_node not in done:
+                                        done.append(target_node)
+
+                            elif constants[node]==0 and node in negative_regs:
+                                if sum_incoming_interactions- len(remaining_negatives)>= 1:
+                                    LDOI.append(target_node)
+                                    constants.update({target_node: 1})
+                                    if target_node not in done:
+                                        done.append(target_node)
+
+
+        starting_point=copy.deepcopy(list(set(next_starting_point)))
+        counter.append(len(done))
+
+
+    return LDOI,constants
+
